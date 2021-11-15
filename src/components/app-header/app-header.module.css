@@ -1,0 +1,28 @@
+.header {
+  min-height: 88px;
+  background-color: #1c1c21;
+}
+
+.nav {
+  min-height: 88px;
+}
+
+.navList {
+  min-height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+}
+
+.logoItem {
+  margin-left: 112px;
+  margin-right: 289px;
+}
