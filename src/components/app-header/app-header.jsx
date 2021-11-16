@@ -9,8 +9,6 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 const AppHeader = () => {
-  const [current, setCurrent] = React.useState("one");
-
   return (
     <header className={css.header}>
       <nav className={css.nav}>
