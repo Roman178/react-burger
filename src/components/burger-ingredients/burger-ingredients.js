@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import {
   Tab,
   CurrencyIcon,
@@ -26,7 +26,7 @@ const IngredientsBlock = ({ ingredientTitle, ingredients }) => {
       <h3>{ingredientTitle}</h3>
       <ul className={css.cards}>
         {ingredients.map((i) => (
-          <IngredientCard ingredient={i} />
+          <IngredientCard key={i.id} ingredient={i} />
         ))}
       </ul>
     </div>
@@ -38,7 +38,7 @@ const BurgerIngredients = ({ ingredients }) => {
 
   return (
     <div className={css.root}>
-      <h2>Соберите бургер</h2>
+      <h2 className={css.title}>Соберите бургер</h2>
       <div className={css.tabs}>
         {Object.keys(translate).map((ingredientType) => (
           <Tab
@@ -53,6 +53,7 @@ const BurgerIngredients = ({ ingredients }) => {
       <div className={css.ingredientsRoot}>
         {Object.keys(translate).map((ingredientType) => (
           <IngredientsBlock
+            key={ingredientType}
             ingredientTitle={translate[ingredientType]}
             ingredients={ingredients.filter((i) => i.type === ingredientType)}
           />

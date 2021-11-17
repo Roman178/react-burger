@@ -2,8 +2,24 @@
   width: 600px;
 }
 .ingredientsRoot {
-  max-height: 100vh;
+  max-height: 555px;
   overflow-y: scroll;
+  scrollbar-color: #8585ad #2f2f37;
+  scrollbar-width: 8px;
+}
+
+.ingredientsRoot::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #2f2f37;
+}
+
+.ingredientsRoot::-webkit-scrollbar-thumb {
+  background-color: #8585ad;
+}
+
+.title {
+  margin: 0;
 }
 
 .tabs {
