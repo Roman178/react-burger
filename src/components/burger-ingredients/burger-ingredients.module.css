@@ -1,3 +1,29 @@
+.root {
+  width: 600px;
+}
+.ingredientsRoot {
+  max-height: 100vh;
+  overflow-y: scroll;
+}
+
 .tabs {
   display: flex;
+}
+
+.cards {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ingredientName {
+  text-align: center;
 }

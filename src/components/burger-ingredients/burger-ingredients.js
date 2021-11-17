@@ -1,66 +1,64 @@
 import React, { useState, useMemo } from "react";
-import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
+import {
+  Tab,
+  CurrencyIcon,
+} from "@ya.praktikum/react-developer-burger-ui-components";
 import css from "./burger-ingredients.module.css";
 
-const IngredientGridItem = ({ ingredient }) => {
-  return <div>{ingredient.name}</div>;
+const translate = { bun: "Булки", sauce: "Соусы", main: "Начинки" };
+
+const IngredientCard = ({ ingredient }) => {
+  return (
+    <li className={css.card}>
+      <img src={ingredient.image} alt={ingredient.name} />
+      <span>
+        {ingredient.price}
+        <CurrencyIcon />
+      </span>
+      <span className={css.ingredientName}>{ingredient.name}</span>
+    </li>
+  );
+};
+
+const IngredientsBlock = ({ ingredientTitle, ingredients }) => {
+  return (
+    <div>
+      <h3>{ingredientTitle}</h3>
+      <ul className={css.cards}>
+        {ingredients.map((i) => (
+          <IngredientCard ingredient={i} />
+        ))}
+      </ul>
+    </div>
+  );
 };
 
 const BurgerIngredients = ({ ingredients }) => {
-  console.log(ingredients);
   const [currentType, setCurrentType] = useState("");
 
-  const currentIngredients = useMemo(
-    () =>
-      currentType
-        ? ingredients.filter((ingredient) => ingredient.type === currentType)
-        : [...ingredients],
-    [currentType, ingredients]
-  );
-
-  console.log(currentIngredients);
-
   return (
-    <>
+    <div className={css.root}>
       <h2>Соберите бургер</h2>
       <div className={css.tabs}>
-        <Tab
-          value="bun"
-          active={currentType === "bun"}
-          onClick={setCurrentType}
-        >
-          Булки
-        </Tab>
-        <Tab
-          value="sauce"
-          active={currentType === "sauce"}
-          onClick={setCurrentType}
-        >
-          Соусы
-        </Tab>
-        <Tab
-          value="main"
-          active={currentType === "main"}
-          onClick={setCurrentType}
-        >
-          Начинки
-        </Tab>
-      </div>
-      <h3>
-        {currentType === "bun"
-          ? "Булки"
-          : currentType === "sauce"
-          ? "Соусы"
-          : currentType === "main"
-          ? "Начинки"
-          : ""}
-      </h3>
-      <ul style={{ maxHeight: "100vh" }}>
-        {currentIngredients.map((i) => (
-          <IngredientGridItem ingredient={i} />
+        {Object.keys(translate).map((ingredientType) => (
+          <Tab
+            value={ingredientType}
+            active={currentType === ingredientType}
+            onClick={setCurrentType}
+          >
+            {translate[ingredientType]}
+          </Tab>
         ))}
-      </ul>
-    </>
+      </div>
+      <div className={css.ingredientsRoot}>
+        {Object.keys(translate).map((ingredientType) => (
+          <IngredientsBlock
+            ingredientTitle={translate[ingredientType]}
+            ingredients={ingredients.filter((i) => i.type === ingredientType)}
+          />
+        ))}
+      </div>
+    </div>
   );
 };
 

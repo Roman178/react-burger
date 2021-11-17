@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AppHeader from "./components/app-header/app-header";
 import BurgerIngredients from "./components/burger-ingredients/burger-ingredients";
+import css from "./App.module.css";
 
 function App() {
   const [ingredients, setIngredients] = useState(null);
@@ -17,7 +18,7 @@ function App() {
   }, []);
 
   return (
-    <div>
+    <div className={css.root}>
       <AppHeader />
       {ingredients && <BurgerIngredients ingredients={ingredients} />}
     </div>
