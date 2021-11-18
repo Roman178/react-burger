@@ -1,15 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, forwardRef, useRef } from "react";
 import {
   Tab,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import css from "./burger-ingredients.module.css";
 
-const translate = { bun: "Булки", sauce: "Соусы", main: "Начинки" };
+const BUN = "bun";
+const SAUCE = "sauce";
+const MAIN_INGREDIENT = "main";
 
-const IngredientCard = ({ ingredient }) => {
+const translate = {
+  [BUN]: "Булки",
+  [SAUCE]: "Соусы",
+  [MAIN_INGREDIENT]: "Начинки",
+};
+
+const IngredientCard = ({ ingredient, addIngredient }) => {
   return (
-    <li className={css.card}>
+    <li className={css.card} onClick={() => addIngredient(ingredient)}>
       <img src={ingredient.image} alt={ingredient.name} />
       <span>
         {ingredient.price}
@@ -20,21 +28,40 @@ const IngredientCard = ({ ingredient }) => {
   );
 };
 
-const IngredientsBlock = ({ ingredientTitle, ingredients }) => {
-  return (
-    <div>
-      <h3>{ingredientTitle}</h3>
-      <ul className={css.cards}>
-        {ingredients.map((i) => (
-          <IngredientCard key={i.id} ingredient={i} />
-        ))}
-      </ul>
-    </div>
-  );
-};
+const IngredientsBlock = forwardRef(
+  ({ ingredientTitle, ingredients, addIngredient }, ref) => {
+    return (
+      <div>
+        <h3 ref={ref}>{ingredientTitle}</h3>
+        <ul className={css.cards}>
+          {ingredients.map((i) => (
+            <IngredientCard
+              addIngredient={addIngredient}
+              key={i.id}
+              ingredient={i}
+            />
+          ))}
+        </ul>
+      </div>
+    );
+  }
+);
 
-const BurgerIngredients = ({ ingredients }) => {
+const BurgerIngredients = ({ ingredients, addIngredient }) => {
   const [currentType, setCurrentType] = useState("");
+  const bunRef = useRef(null);
+  const sauceRef = useRef(null);
+  const mainRef = useRef(null);
+  const refs = {
+    [`${BUN}Ref`]: bunRef,
+    [`${SAUCE}Ref`]: sauceRef,
+    [`${MAIN_INGREDIENT}Ref`]: mainRef,
+  };
+
+  const handleTabClick = (type) => {
+    setCurrentType(type);
+    refs[`${type}Ref`].current.scrollIntoView();
+  };
 
   return (
     <div className={css.root}>
@@ -44,7 +71,7 @@ const BurgerIngredients = ({ ingredients }) => {
           <Tab
             value={ingredientType}
             active={currentType === ingredientType}
-            onClick={setCurrentType}
+            onClick={handleTabClick}
           >
             {translate[ingredientType]}
           </Tab>
@@ -53,6 +80,8 @@ const BurgerIngredients = ({ ingredients }) => {
       <div className={css.ingredientsRoot}>
         {Object.keys(translate).map((ingredientType) => (
           <IngredientsBlock
+            addIngredient={addIngredient}
+            ref={refs[`${ingredientType}Ref`]}
             key={ingredientType}
             ingredientTitle={translate[ingredientType]}
             ingredients={ingredients.filter((i) => i.type === ingredientType)}
