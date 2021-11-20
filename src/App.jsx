@@ -1,50 +1,87 @@
 import React, { useEffect, useState } from "react";
 import AppHeader from "./components/app-header/app-header";
 import BurgerIngredients from "./components/burger-ingredients/burger-ingredients";
-import BurgerConstructor from "./components/burger-constructor/burger-constructor.js";
+import BurgerConstructor from "./components/burger-constructor/burger-constructor";
+import ModalOverlay from "./components/modal-overlay/modal-overlay";
 import css from "./App.module.css";
+import Modal from "./components/modal/modal";
+
+const BASE_URL = "https://norma.nomoreparties.space/api/ingredients";
 
 function App() {
   const [ingredients, setIngredients] = useState(null);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
-  const [selectedBun, setSelectedBun] = useState(null);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const openModal = () => {
+    setIsOpenModal(true);
+  };
+
+  const closeModal = () => {
+    setIsOpenModal(false);
+  };
 
   const addIngredient = (addedIngredient) => {
-    if (addedIngredient.type === "bun" && !selectedBun) {
-      setSelectedBun(addedIngredient);
-    }
-    const test = new Set(selectedIngredients);
-    test.add(addedIngredient);
-    console.log(test);
-    setSelectedIngredients([...selectedIngredients, addedIngredient]);
+    addedIngredient.type === "bun"
+      ? setSelectedIngredients([
+          ...selectedIngredients.filter((i) => i.type !== "bun"),
+          addedIngredient,
+        ])
+      : setSelectedIngredients([...selectedIngredients, addedIngredient]);
+  };
+
+  const removeIngredient = (
+    removedIngredientIndex,
+    selectedIngredientsWithoutBun
+  ) => {
+    const bun = selectedIngredients.find((i) => i.type === "bun");
+    setSelectedIngredients([
+      ...selectedIngredientsWithoutBun.filter(
+        (_, index) => index !== removedIngredientIndex
+      ),
+      bun,
+    ]);
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(
-        "https://norma.nomoreparties.space/api/ingredients"
-      );
+      const res = await fetch(BASE_URL);
       const { data } = await res.json();
       setIngredients(data);
+      setSelectedIngredients([
+        ...selectedIngredients,
+        data.find((ingredient) => ingredient.type === "bun"),
+      ]);
     };
     fetchData();
   }, []);
 
   return (
-    <div className={css.app}>
-      <AppHeader />
-      <main className={css.content}>
-        {ingredients && (
-          <BurgerIngredients
-            addIngredient={addIngredient}
-            ingredients={ingredients}
-          />
-        )}
-        {ingredients && (
-          <BurgerConstructor selectedIngredients={selectedIngredients} />
-        )}
-      </main>
-    </div>
+    <>
+      <div className={css.app}>
+        <AppHeader />
+        <main className={css.content}>
+          {ingredients && (
+            <BurgerIngredients
+              addIngredient={addIngredient}
+              ingredients={ingredients}
+              openModal={openModal}
+              closeModal={closeModal}
+              isOpenModal={isOpenModal}
+            />
+          )}
+          {selectedIngredients.length > 0 && (
+            <BurgerConstructor
+              selectedIngredients={selectedIngredients}
+              removeIngredient={removeIngredient}
+              openModal={openModal}
+              closeModal={closeModal}
+              isOpenModal={isOpenModal}
+            />
+          )}
+        </main>
+      </div>
+    </>
   );
 }
 

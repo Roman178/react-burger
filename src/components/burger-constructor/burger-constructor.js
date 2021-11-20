@@ -1,32 +1,56 @@
-import React from "react";
+import React, { useMemo } from "react";
 import css from "./burger-constructor.module.css";
-import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
+import {
+  ConstructorElement,
+  Button,
+} from "@ya.praktikum/react-developer-burger-ui-components";
+import Modal from "../modal/modal";
 
-const BurgerConstructor = ({ selectedIngredients }) => {
-  console.log(selectedIngredients);
-
-  const selectedBun = selectedIngredients.find(
-    (ingredient) => ingredient.type === "bun"
+const BurgerConstructor = ({
+  selectedIngredients,
+  removeIngredient,
+  isOpenModal,
+  openModal,
+  closeModal,
+}) => {
+  const selectedBun = useMemo(
+    () => selectedIngredients.find((ingredient) => ingredient.type === "bun"),
+    [selectedIngredients]
   );
 
-  console.log(selectedBun);
   return (
-    <div className={css.root}>
-      <ConstructorElement
-        type="top"
-        isLocked={true}
-        // text={selectedBun.name}
-        price={200}
-        thumbnail={selectedBun.image}
-      />
-      <ConstructorElement
-        type="bottom"
-        isLocked={true}
-        // text={selectedBun.name}
-        price={200}
-        thumbnail={selectedBun.image}
-      />
-    </div>
+    <>
+      {isOpenModal && <Modal closeModal={closeModal}></Modal>}
+      <div className={css.root}>
+        <ConstructorElement
+          type="top"
+          isLocked={true}
+          text={selectedBun.name}
+          price={selectedBun.price}
+          thumbnail={selectedBun.image}
+        />
+        {selectedIngredients
+          .filter((i) => i.type !== "bun")
+          .map((ingredient, index, arr) => (
+            <ConstructorElement
+              text={ingredient.name}
+              thumbnail={ingredient.image}
+              price={ingredient.price}
+              handleClose={() => removeIngredient(index, arr)}
+            />
+          ))}
+        <ConstructorElement
+          type="bottom"
+          isLocked={true}
+          text={selectedBun.name}
+          price={selectedBun.price}
+          thumbnail={selectedBun.image}
+        />
+        <Button type="primary" size="medium" onClick={() => openModal()}>
+          Оформить заказ
+        </Button>
+      </div>
+    </>
   );
 };
 

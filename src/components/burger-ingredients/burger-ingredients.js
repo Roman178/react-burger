@@ -37,7 +37,7 @@ const IngredientsBlock = forwardRef(
           {ingredients.map((i) => (
             <IngredientCard
               addIngredient={addIngredient}
-              key={i.id}
+              key={i._id}
               ingredient={i}
             />
           ))}
