@@ -1,19 +1,25 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import css from "./burger-constructor.module.css";
 import {
   ConstructorElement,
   Button,
+  DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { useModal } from "../../hooks/useModal";
 
-const BurgerConstructor = ({ selectedIngredients, removeIngredient }) => {
+const BurgerConstructor = ({ ingredients }) => {
   const selectedBun = useMemo(
-    () => selectedIngredients.find((ingredient) => ingredient.type === "bun"),
-    [selectedIngredients]
+    () => ingredients.find((ingredient) => ingredient.type === "bun"),
+    [ingredients]
   );
   const { isOpenModal, closeModal, openModal } = useModal();
+
+  const totalCount = ingredients.reduce(
+    (sum, current) => sum + current.price,
+    0
+  );
 
   return (
     <>
@@ -21,33 +27,47 @@ const BurgerConstructor = ({ selectedIngredients, removeIngredient }) => {
         <OrderDetails />
       </Modal>
       <div className={css.root}>
-        <ConstructorElement
-          type="top"
-          isLocked={true}
-          text={selectedBun.name}
-          price={selectedBun.price}
-          thumbnail={selectedBun.image}
-        />
-        {selectedIngredients
-          .filter((i) => i.type !== "bun")
-          .map((ingredient, index, arr) => (
+        <div className={css.elements}>
+          <div className={css.elemetWrapper}>
             <ConstructorElement
-              text={ingredient.name}
-              thumbnail={ingredient.image}
-              price={ingredient.price}
-              handleClose={() => removeIngredient(index, arr)}
+              type="top"
+              isLocked={true}
+              text={selectedBun.name}
+              price={selectedBun.price}
+              thumbnail={selectedBun.image}
             />
-          ))}
-        <ConstructorElement
-          type="bottom"
-          isLocked={true}
-          text={selectedBun.name}
-          price={selectedBun.price}
-          thumbnail={selectedBun.image}
-        />
-        <Button type="primary" size="medium" onClick={openModal}>
-          Оформить заказ
-        </Button>
+          </div>
+          {ingredients
+            .filter((i) => i.type !== "bun")
+            .map((ingredient) => (
+              <div className={css.elemetWrapper}>
+                <div className="mr-2">
+                  <DragIcon />
+                </div>
+                <ConstructorElement
+                  text={ingredient.name}
+                  thumbnail={ingredient.image}
+                  price={ingredient.price}
+                />
+              </div>
+            ))}
+          <div className={css.elemetWrapper}>
+            <ConstructorElement
+              type="bottom"
+              isLocked={true}
+              text={selectedBun.name}
+              price={selectedBun.price}
+              thumbnail={selectedBun.image}
+            />
+          </div>
+        </div>
+
+        <div className="mt-10">
+          <p>{totalCount}</p>
+          <Button type="primary" size="medium" onClick={openModal}>
+            Оформить заказ
+          </Button>
+        </div>
       </div>
     </>
   );

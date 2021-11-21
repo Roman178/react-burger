@@ -1,3 +1,30 @@
 .root {
   width: 600px;
+  padding-top: 100px;
+}
+
+.elements {
+  overflow-y: scroll;
+  display: grid;
+  gap: 16px;
+  justify-content: center;
+  max-height: calc(100vh - 300px);
+  scrollbar-color: #8585ad #2f2f37;
+  scrollbar-width: 8px;
+}
+
+.elements::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #2f2f37;
+}
+
+.elements::-webkit-scrollbar-thumb {
+  background-color: #8585ad;
+}
+
+.elemetWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }

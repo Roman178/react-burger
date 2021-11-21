@@ -80,7 +80,7 @@ const BurgerIngredients = ({ ingredients, addIngredient, modalProps }) => {
 
   return (
     <div className={css.root}>
-      <h2 className={css.title}>Соберите бургер</h2>
+      <h2 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h2>
       <div className={css.tabs}>
         {Object.keys(translate).map((ingredientType) => (
           <Tab
