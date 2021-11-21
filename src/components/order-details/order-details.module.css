@@ -1,0 +1,24 @@
+.root {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 0 120px;
+}
+
+.orderSuccessImg {
+  margin: 60px 0 60px;
+}
+
+.orderIdText {
+  margin: 0;
+}
+
+.orderStatus {
+  margin: 0;
+}
+
+.orderNote {
+  margin: 0;
+}

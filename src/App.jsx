@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import AppHeader from "./components/app-header/app-header";
 import BurgerIngredients from "./components/burger-ingredients/burger-ingredients";
 import BurgerConstructor from "./components/burger-constructor/burger-constructor";
@@ -13,13 +13,18 @@ function App() {
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
 
-  const openModal = () => {
+  const openModal = useCallback(() => {
     setIsOpenModal(true);
-  };
+  }, [setIsOpenModal]);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setIsOpenModal(false);
-  };
+  }, [setIsOpenModal]);
+
+  const modalProps = useMemo(
+    () => ({ isOpenModal, openModal, closeModal }),
+    [isOpenModal, openModal, closeModal]
+  );
 
   const addIngredient = (addedIngredient) => {
     addedIngredient.type === "bun"
@@ -65,18 +70,14 @@ function App() {
             <BurgerIngredients
               addIngredient={addIngredient}
               ingredients={ingredients}
-              openModal={openModal}
-              closeModal={closeModal}
-              isOpenModal={isOpenModal}
+              modalProps={modalProps}
             />
           )}
           {selectedIngredients.length > 0 && (
             <BurgerConstructor
               selectedIngredients={selectedIngredients}
               removeIngredient={removeIngredient}
-              openModal={openModal}
-              closeModal={closeModal}
-              isOpenModal={isOpenModal}
+              modalProps={modalProps}
             />
           )}
         </main>

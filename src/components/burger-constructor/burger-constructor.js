@@ -1,26 +1,25 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import css from "./burger-constructor.module.css";
 import {
   ConstructorElement,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
+import OrderDetails from "../order-details/order-details";
+import { useModal } from "../../hooks/useModal";
 
-const BurgerConstructor = ({
-  selectedIngredients,
-  removeIngredient,
-  isOpenModal,
-  openModal,
-  closeModal,
-}) => {
+const BurgerConstructor = ({ selectedIngredients, removeIngredient }) => {
   const selectedBun = useMemo(
     () => selectedIngredients.find((ingredient) => ingredient.type === "bun"),
     [selectedIngredients]
   );
+  const { isOpenModal, closeModal, openModal } = useModal();
 
   return (
     <>
-      {isOpenModal && <Modal closeModal={closeModal}></Modal>}
+      <Modal closeModal={closeModal} isOpenModalProp={isOpenModal}>
+        <OrderDetails />
+      </Modal>
       <div className={css.root}>
         <ConstructorElement
           type="top"
@@ -46,7 +45,7 @@ const BurgerConstructor = ({
           price={selectedBun.price}
           thumbnail={selectedBun.image}
         />
-        <Button type="primary" size="medium" onClick={() => openModal()}>
+        <Button type="primary" size="medium" onClick={openModal}>
           Оформить заказ
         </Button>
       </div>

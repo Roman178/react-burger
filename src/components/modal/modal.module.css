@@ -1,5 +1,4 @@
 .root {
-  padding: 40px 0 40px;
   background-color: #1c1c21;
   border: 1px solid rgba(76, 76, 255, 0.2);
   box-sizing: border-box;
@@ -9,4 +8,12 @@
   border-radius: 40px;
   width: 720px;
   min-height: 100px;
+  position: relative;
+}
+
+.closeIconBox {
+  position: absolute;
+  top: 60px;
+  right: 40px;
+  cursor: pointer;
 }

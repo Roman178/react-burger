@@ -4,6 +4,9 @@ import {
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import css from "./burger-ingredients.module.css";
+import Modal from "../modal/modal";
+import IngredientDetails from "../ingredient-details/ingredient-details";
+import { useModal } from "../../hooks/useModal";
 
 const BUN = "bun";
 const SAUCE = "sauce";
@@ -15,21 +18,33 @@ const translate = {
   [MAIN_INGREDIENT]: "Начинки",
 };
 
-const IngredientCard = ({ ingredient, addIngredient }) => {
+const IngredientCard = ({ ingredient, modalProps, addIngredient }) => {
+  const { isOpenModal, closeModal, openModal } = useModal();
+
   return (
-    <li className={css.card} onClick={() => addIngredient(ingredient)}>
-      <img src={ingredient.image} alt={ingredient.name} />
-      <span>
-        {ingredient.price}
-        <CurrencyIcon />
-      </span>
-      <span className={css.ingredientName}>{ingredient.name}</span>
-    </li>
+    <>
+      <Modal closeModal={closeModal} isOpenModalProp={isOpenModal}>
+        <IngredientDetails {...ingredient} />
+      </Modal>
+
+      <li
+        className={css.card}
+        // onClick={() => addIngredient(ingredient)}
+        onClick={() => openModal()}
+      >
+        <img src={ingredient.image} alt={ingredient.name} />
+        <span>
+          {ingredient.price}
+          <CurrencyIcon />
+        </span>
+        <span className={css.ingredientName}>{ingredient.name}</span>
+      </li>
+    </>
   );
 };
 
 const IngredientsBlock = forwardRef(
-  ({ ingredientTitle, ingredients, addIngredient }, ref) => {
+  ({ ingredientTitle, ingredients, addIngredient, modalProps }, ref) => {
     return (
       <div>
         <h3 ref={ref}>{ingredientTitle}</h3>
@@ -47,7 +62,7 @@ const IngredientsBlock = forwardRef(
   }
 );
 
-const BurgerIngredients = ({ ingredients, addIngredient }) => {
+const BurgerIngredients = ({ ingredients, addIngredient, modalProps }) => {
   const [currentType, setCurrentType] = useState("");
   const bunRef = useRef(null);
   const sauceRef = useRef(null);
