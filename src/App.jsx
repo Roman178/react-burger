@@ -26,6 +26,7 @@ function App() {
     [isOpenModal, openModal, closeModal]
   );
 
+  // draft
   const addIngredient = (addedIngredient) => {
     addedIngredient.type === "bun"
       ? setSelectedIngredients([
