@@ -28,3 +28,17 @@
   align-items: center;
   justify-content: flex-end;
 }
+
+.totalBox {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.totalCountWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.totalCountDigit {
+  margin-right: 9.5px;
+}

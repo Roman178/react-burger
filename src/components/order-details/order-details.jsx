@@ -1,4 +1,3 @@
-import cn from "classnames";
 import React from "react";
 import orderSuccess from "../../images/order-success.png";
 import css from "./order-details.module.css";

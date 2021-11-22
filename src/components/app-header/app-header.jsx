@@ -15,18 +15,42 @@ const AppHeader = () => {
         <ul className={css.navList}>
           <li className={cn(css.listItem, "pl-5", "pr-5")}>
             <BurgerIcon />
-            <a className="text text_type_main-default">Конструктор</a>
+            <a
+              href="/"
+              className={cn(
+                css.listItemLink,
+                "text text_type_main-default ml-2"
+              )}
+            >
+              Конструктор
+            </a>
           </li>
           <li className={cn(css.listItem, "pl-5", "pr-5")}>
-            <ListIcon />
-            <a className="text text_type_main-default">Лента заказов</a>
+            <ListIcon type="secondary" />
+            <a
+              href="/"
+              className={cn(
+                css.listItemLink,
+                "text text_type_main-default ml-2 text_color_inactive"
+              )}
+            >
+              Лента заказов
+            </a>
           </li>
           <li className={cn(css.listItem, css.logoItem)}>
             <Logo />
           </li>
           <li className={cn(css.listItem, "pl-5", "pr-5")}>
-            <ProfileIcon />
-            <a className="text text_type_main-default">Личный кабинет</a>
+            <ProfileIcon type="secondary" />
+            <a
+              href="/"
+              className={cn(
+                css.listItemLink,
+                "text text_type_main-default ml-2 text_color_inactive"
+              )}
+            >
+              Личный кабинет
+            </a>
           </li>
         </ul>
       </nav>

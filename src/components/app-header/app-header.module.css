@@ -22,6 +22,11 @@
   align-items: center;
 }
 
+.listItemLink {
+  text-decoration: none;
+  color: inherit;
+}
+
 .logoItem {
   margin-left: 112px;
   margin-right: 289px;

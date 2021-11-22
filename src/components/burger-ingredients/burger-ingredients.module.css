@@ -1,5 +1,6 @@
 .root {
   width: 600px;
+  margin-right: 40px;
 }
 .ingredientsRoot {
   max-height: calc(100vh - 244px);
@@ -28,6 +29,9 @@
   padding: 0;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  padding-left: 20px;
+  column-gap: 24px;
+  row-gap: 32px;
 }
 
 .card {
@@ -39,4 +43,10 @@
 
 .ingredientName {
   text-align: center;
+}
+
+.priceBox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
 }

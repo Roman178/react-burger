@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
+import PropTypes from "prop-types";
 import css from "./modal-overlay.module.css";
 
 const ModalOverlay = ({ closeModal, children }) => {
@@ -13,6 +14,11 @@ const ModalOverlay = ({ closeModal, children }) => {
       {children}
     </div>
   );
+};
+
+ModalOverlay.propTypes = {
+  children: PropTypes.element.isRequired,
+  closeModal: PropTypes.func,
 };
 
 export default ModalOverlay;
