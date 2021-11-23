@@ -3,7 +3,7 @@
   margin-right: 40px;
 }
 .ingredientsRoot {
-  max-height: calc(100vh - 244px);
+  max-height: calc(100vh - 284px);
   overflow-y: scroll;
   scrollbar-color: #8585ad #2f2f37;
   scrollbar-width: 8px;
@@ -21,6 +21,7 @@
 
 .tabs {
   display: flex;
+  margin-bottom: 40px;
 }
 
 .cards {

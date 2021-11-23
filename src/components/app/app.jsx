@@ -4,9 +4,11 @@ import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import css from "./app.module.css";
 import { BASE_URL } from "../../constants/constants";
+import { InfoIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
 function App() {
   const [ingredients, setIngredients] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -15,10 +17,8 @@ function App() {
         const { data } = await res.json();
         setIngredients(data);
       } catch (error) {
-        console.error(
-          "Error has occurred when trying fetch data ",
-          error.message
-        );
+        setError(error);
+        console.error("Error has occurred when fetching data: ", error.message);
       }
     };
     fetchData();
@@ -29,8 +29,17 @@ function App() {
       <div className={css.app}>
         <AppHeader />
         <main className={css.content}>
-          {ingredients && <BurgerIngredients ingredients={ingredients} />}
-          {ingredients && <BurgerConstructor ingredients={ingredients} />}
+          {!error ? (
+            <>
+              {ingredients && <BurgerIngredients ingredients={ingredients} />}
+              {ingredients && <BurgerConstructor ingredients={ingredients} />}
+            </>
+          ) : (
+            <p className="text text_type_main-default mt-10">
+              <InfoIcon type="error" />
+              Произошла ошибка: {error.message}. Попробуйте зайти позже.
+            </p>
+          )}
         </main>
       </div>
     </>

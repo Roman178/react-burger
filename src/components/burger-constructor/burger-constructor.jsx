@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import PropTypes from "prop-types";
+import { ingredientType } from "../../types/index";
 import css from "./burger-constructor.module.css";
 import {
   ConstructorElement,
@@ -26,20 +27,22 @@ const BurgerConstructor = ({ ingredients }) => {
 
   return (
     <>
-      <Modal closeModal={closeModal} isOpenModalProp={isOpenModal}>
-        <OrderDetails />
-      </Modal>
+      {isOpenModal && (
+        <Modal closeModal={closeModal}>
+          <OrderDetails />
+        </Modal>
+      )}
       <div className={css.root}>
+        <div className={cn(css.elemetWrapper, "mb-4", "pr-4")}>
+          <ConstructorElement
+            type="top"
+            isLocked={true}
+            text={selectedBun.name + " (верх)"}
+            price={selectedBun.price}
+            thumbnail={selectedBun.image}
+          />
+        </div>
         <div className={css.elements}>
-          <div className={css.elemetWrapper}>
-            <ConstructorElement
-              type="top"
-              isLocked={true}
-              text={selectedBun.name}
-              price={selectedBun.price}
-              thumbnail={selectedBun.image}
-            />
-          </div>
           {ingredients
             .filter((i) => i.type !== "bun")
             .map((ingredient) => (
@@ -54,17 +57,16 @@ const BurgerConstructor = ({ ingredients }) => {
                 />
               </div>
             ))}
-          <div className={css.elemetWrapper}>
-            <ConstructorElement
-              type="bottom"
-              isLocked={true}
-              text={selectedBun.name}
-              price={selectedBun.price}
-              thumbnail={selectedBun.image}
-            />
-          </div>
         </div>
-
+        <div className={cn(css.elemetWrapper, "mt-4", "pr-4")}>
+          <ConstructorElement
+            type="bottom"
+            isLocked={true}
+            text={selectedBun.name + " (низ)"}
+            price={selectedBun.price}
+            thumbnail={selectedBun.image}
+          />
+        </div>
         <div className={cn(css.totalBox, "mt-10 pr-5")}>
           <div className={cn(css.totalCountWrapper, "mr-10")}>
             <p
@@ -87,22 +89,7 @@ const BurgerConstructor = ({ ingredients }) => {
 };
 
 BurgerConstructor.propTypes = {
-  ingredients: PropTypes.arrayOf(
-    PropTypes.exact({
-      _id: PropTypes.string,
-      name: PropTypes.string,
-      type: PropTypes.string,
-      proteins: PropTypes.number,
-      fat: PropTypes.number,
-      carbohydrates: PropTypes.number,
-      calories: PropTypes.number,
-      price: PropTypes.number,
-      image: PropTypes.string,
-      image_mobile: PropTypes.string,
-      image_large: PropTypes.string,
-      __v: PropTypes.number,
-    })
-  ),
+  ingredients: PropTypes.arrayOf(PropTypes.exact(ingredientType)),
 };
 
 export default BurgerConstructor;

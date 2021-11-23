@@ -1,5 +1,6 @@
 import React, { useState, forwardRef, useRef } from "react";
 import PropTypes from "prop-types";
+import { ingredientType } from "../../types/index";
 import {
   Tab,
   CurrencyIcon,
@@ -21,9 +22,11 @@ const IngredientCard = ({ ingredient }) => {
 
   return (
     <>
-      <Modal closeModal={closeModal} isOpenModalProp={isOpenModal}>
-        <IngredientDetails {...ingredient} />
-      </Modal>
+      {isOpenModal && (
+        <Modal closeModal={closeModal}>
+          <IngredientDetails {...ingredient} />
+        </Modal>
+      )}
 
       <li className={css.card} onClick={() => openModal()}>
         <img src={ingredient.image} alt={ingredient.name} />
@@ -106,59 +109,16 @@ const BurgerIngredients = ({ ingredients }) => {
 };
 
 IngredientCard.propTypes = {
-  ingredient: PropTypes.exact({
-    _id: PropTypes.string,
-    name: PropTypes.string,
-    type: PropTypes.string,
-    proteins: PropTypes.number,
-    fat: PropTypes.number,
-    carbohydrates: PropTypes.number,
-    calories: PropTypes.number,
-    price: PropTypes.number,
-    image: PropTypes.string,
-    image_mobile: PropTypes.string,
-    image_large: PropTypes.string,
-    __v: PropTypes.number,
-  }),
+  ingredient: PropTypes.exact(ingredientType),
 };
 
 IngredientsBlock.propTypes = {
-  filteredIngredients: PropTypes.arrayOf(
-    PropTypes.exact({
-      _id: PropTypes.string,
-      name: PropTypes.string,
-      type: PropTypes.string,
-      proteins: PropTypes.number,
-      fat: PropTypes.number,
-      carbohydrates: PropTypes.number,
-      calories: PropTypes.number,
-      price: PropTypes.number,
-      image: PropTypes.string,
-      image_mobile: PropTypes.string,
-      image_large: PropTypes.string,
-      __v: PropTypes.number,
-    })
-  ),
-  ingredientTitle: PropTypes.string,
+  filteredIngredients: PropTypes.arrayOf(PropTypes.exact(ingredientType)),
+  ingredientTitle: PropTypes.string.isRequired,
 };
 
 BurgerIngredients.propTypes = {
-  ingredients: PropTypes.arrayOf(
-    PropTypes.exact({
-      _id: PropTypes.string,
-      name: PropTypes.string,
-      type: PropTypes.string,
-      proteins: PropTypes.number,
-      fat: PropTypes.number,
-      carbohydrates: PropTypes.number,
-      calories: PropTypes.number,
-      price: PropTypes.number,
-      image: PropTypes.string,
-      image_mobile: PropTypes.string,
-      image_large: PropTypes.string,
-      __v: PropTypes.number,
-    })
-  ),
+  ingredients: PropTypes.arrayOf(PropTypes.exact(ingredientType)),
 };
 
 export default BurgerIngredients;

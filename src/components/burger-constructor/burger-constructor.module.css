@@ -7,8 +7,9 @@
   overflow-y: scroll;
   display: grid;
   gap: 16px;
-  justify-content: center;
-  max-height: calc(100vh - 300px);
+  justify-content: flex-end;
+  padding-right: 8px;
+  max-height: calc(100vh - 490px);
   scrollbar-color: #8585ad #2f2f37;
   scrollbar-width: 8px;
 }
