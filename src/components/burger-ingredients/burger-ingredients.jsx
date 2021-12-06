@@ -109,16 +109,17 @@ const BurgerIngredients = ({ ingredients }) => {
 };
 
 IngredientCard.propTypes = {
-  ingredient: PropTypes.exact(ingredientType),
+  ingredient: PropTypes.exact(ingredientType).isRequired,
 };
 
 IngredientsBlock.propTypes = {
-  filteredIngredients: PropTypes.arrayOf(PropTypes.exact(ingredientType)),
+  filteredIngredients: PropTypes.arrayOf(PropTypes.exact(ingredientType))
+    .isRequired,
   ingredientTitle: PropTypes.string.isRequired,
 };
 
 BurgerIngredients.propTypes = {
-  ingredients: PropTypes.arrayOf(PropTypes.exact(ingredientType)),
+  ingredients: PropTypes.arrayOf(PropTypes.exact(ingredientType)).isRequired,
 };
 
 export default BurgerIngredients;
