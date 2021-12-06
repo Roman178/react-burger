@@ -1,0 +1,53 @@
+.root {
+  width: 600px;
+  margin-right: 40px;
+}
+.ingredientsRoot {
+  max-height: calc(100vh - 284px);
+  overflow-y: scroll;
+  scrollbar-color: #8585ad #2f2f37;
+  scrollbar-width: 8px;
+}
+
+.ingredientsRoot::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #2f2f37;
+}
+
+.ingredientsRoot::-webkit-scrollbar-thumb {
+  background-color: #8585ad;
+}
+
+.tabs {
+  display: flex;
+  margin-bottom: 40px;
+}
+
+.cards {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  padding-left: 20px;
+  column-gap: 24px;
+  row-gap: 32px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.ingredientName {
+  text-align: center;
+}
+
+.priceBox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}

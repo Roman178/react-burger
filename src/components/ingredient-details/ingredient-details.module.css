@@ -1,0 +1,23 @@
+.root {
+  padding: 40px 40px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  align-self: flex-start;
+}
+
+.info {
+  display: flex;
+  max-width: 516px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.nutritionalValue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
