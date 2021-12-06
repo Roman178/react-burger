@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import PropTypes from "prop-types";
 import { ingredientType } from "../../types/index";
 import css from "./burger-constructor.module.css";
@@ -12,12 +12,27 @@ import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { useModal } from "../../hooks/useModal";
 import cn from "classnames";
+import { useSelector, useDispatch } from "react-redux";
+import * as types from "../../services/actions/actionTypes";
 
-const BurgerConstructor = ({ ingredients }) => {
-  const selectedBun = useMemo(
-    () => ingredients.find((ingredient) => ingredient.type === "bun"),
-    [ingredients]
-  );
+const BurgerConstructor = () => {
+  // const selectedBun = useMemo(
+  //   () => ingredients.find((ingredient) => ingredient.type === "bun"),
+  //   [ingredients]
+  // );
+
+  const dispatch = useDispatch();
+  const ingredients = useSelector((store) => store.ingredients.items);
+
+  useEffect(() => {
+    dispatch({
+      type: types.ADD_BUN_BURGER,
+      bun: ingredients.find((item) => item.type === "bun"),
+    });
+  }, [dispatch, ingredients]);
+
+  const selectedBun = useSelector((store) => store.burgerIngredients.bun);
+
   const { isOpenModal, closeModal, openModal } = useModal();
 
   const totalCount = ingredients.reduce(

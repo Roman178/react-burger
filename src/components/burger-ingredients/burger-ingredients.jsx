@@ -1,4 +1,5 @@
-import React, { useState, forwardRef, useRef } from "react";
+import React, { useState, forwardRef, useRef, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { ingredientType } from "../../types/index";
 import {
@@ -16,6 +17,7 @@ import {
   MAIN_INGREDIENT,
   translate,
 } from "../../constants/constants";
+import { getIngredients } from "../../services/actions";
 
 const IngredientCard = ({ ingredient }) => {
   const { isOpenModal, closeModal, openModal } = useModal();
@@ -61,7 +63,15 @@ const IngredientsBlock = forwardRef(
   }
 );
 
-const BurgerIngredients = ({ ingredients }) => {
+const BurgerIngredients = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getIngredients());
+  }, [dispatch]);
+
+  const ingredients = useSelector((store) => store.ingredients.items);
+
   const [currentType, setCurrentType] = useState("");
   const bunRef = useRef(null);
   const sauceRef = useRef(null);
