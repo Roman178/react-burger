@@ -8,7 +8,9 @@ import { BASE_URL } from "../../constants/constants";
 import { InfoIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
 function App() {
-  const [error, setError] = useState(null);
+  const error = useSelector((store) => store.ingredients.ingredientsFailed);
+  const ingredients = useSelector((store) => store.ingredients.items);
+  console.log(error);
 
   return (
     <>
@@ -18,7 +20,7 @@ function App() {
           {!error ? (
             <>
               <BurgerIngredients />
-              {/* <BurgerConstructor /> */}
+              <BurgerConstructor />
             </>
           ) : (
             <p className="text text_type_main-default mt-10">

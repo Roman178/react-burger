@@ -23,12 +23,17 @@ const BurgerConstructor = () => {
 
   const dispatch = useDispatch();
   const ingredients = useSelector((store) => store.ingredients.items);
+  const burgerIngredients = useSelector(
+    (store) => store.burgerIngredients.items
+  );
 
   useEffect(() => {
-    dispatch({
-      type: types.ADD_BUN_BURGER,
-      bun: ingredients.find((item) => item.type === "bun"),
-    });
+    if (ingredients.length > 0) {
+      dispatch({
+        type: types.ADD_BUN_BURGER,
+        bun: ingredients.find((item) => item.type === "bun"),
+      });
+    }
   }, [dispatch, ingredients]);
 
   const selectedBun = useSelector((store) => store.burgerIngredients.bun);
@@ -58,9 +63,12 @@ const BurgerConstructor = () => {
           />
         </div>
         <div className={css.elements}>
-          {ingredients
-            .filter((i) => i.type !== "bun")
-            .map((ingredient) => (
+          {
+            //burgerIngredients &&
+            //burgerIngredients.length > 0 &&
+            // ingredients
+            //   .filter((i) => i.type !== "bun")
+            burgerIngredients.map((ingredient) => (
               <div key={ingredient.name} className={css.elemetWrapper}>
                 <div className="mr-2">
                   <DragIcon />
@@ -71,7 +79,8 @@ const BurgerConstructor = () => {
                   price={ingredient.price}
                 />
               </div>
-            ))}
+            ))
+          }
         </div>
         <div className={cn(css.elemetWrapper, "mt-4", "pr-4")}>
           <ConstructorElement
