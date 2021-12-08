@@ -1,7 +1,7 @@
 import { BASE_URL } from "../constants/constants";
 
 export const fetchIngredients = () => {
-  return fetch(BASE_URL)
+  return fetch(`${BASE_URL}/ingredients`)
     .then((res) => {
       if (res.ok) return res.json();
       return Promise.reject(res);
@@ -11,7 +11,7 @@ export const fetchIngredients = () => {
 };
 
 export const createOrderApi = (ingredients) => {
-  return fetch(BASE_URL, {
+  return fetch(`${BASE_URL}/orders`, {
     method: "POST",
     body: JSON.stringify(ingredients),
     headers: {
@@ -22,6 +22,6 @@ export const createOrderApi = (ingredients) => {
       if (res.ok) return res.json();
       return Promise.reject(res);
     })
-    .then(({ data }) => data)
+    .then((data) => data)
     .catch((err) => Promise.reject(err));
 };

@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { ingredientType } from "../../types/index";
 import css from "./burger-constructor.module.css";
@@ -14,6 +14,7 @@ import { useModal } from "../../hooks/useModal";
 import cn from "classnames";
 import { useSelector, useDispatch } from "react-redux";
 import * as types from "../../services/actions/actionTypes";
+import { createOrder as createOrderAction } from "../../services/actions/index";
 
 const BurgerConstructor = () => {
   // const selectedBun = useMemo(
@@ -44,6 +45,19 @@ const BurgerConstructor = () => {
     (sum, current) => sum + current.price,
     0
   );
+
+  const createOrder = () => {
+    dispatch(
+      createOrderAction({
+        ingredients: [
+          burgerIngredients[0]._id,
+          selectedBun._id,
+          selectedBun._id,
+        ],
+      })
+    );
+    openModal();
+  };
 
   return (
     <>
@@ -103,7 +117,7 @@ const BurgerConstructor = () => {
             </p>
             <CurrencyIcon />
           </div>
-          <Button type="primary" size="medium" onClick={openModal}>
+          <Button type="primary" size="medium" onClick={createOrder}>
             Оформить заказ
           </Button>
         </div>

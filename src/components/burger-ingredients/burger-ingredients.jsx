@@ -18,9 +18,20 @@ import {
   translate,
 } from "../../constants/constants";
 import { getIngredients } from "../../services/actions";
+import * as types from "../../services/actions/actionTypes";
 
 const IngredientCard = ({ ingredient }) => {
   const { isOpenModal, closeModal, openModal } = useModal();
+
+  const dispatch = useDispatch();
+
+  const setIngredient = () => {
+    dispatch({
+      type: types.SET_CURRENT_INGREDIENT,
+      currentIngredient: ingredient,
+    });
+    openModal();
+  };
 
   return (
     <>
@@ -30,7 +41,7 @@ const IngredientCard = ({ ingredient }) => {
         </Modal>
       )}
 
-      <li className={css.card} onClick={() => openModal()}>
+      <li className={css.card} onClick={() => setIngredient()}>
         <img src={ingredient.image} alt={ingredient.name} />
         <div className={css.priceBox}>
           <span className="text text_type_digits-default mr-2">
