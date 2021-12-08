@@ -65,12 +65,11 @@ const IngredientsBlock = forwardRef(
 
 const BurgerIngredients = () => {
   const dispatch = useDispatch();
+  const ingredients = useSelector((store) => store.ingredients.items);
 
   useEffect(() => {
-    dispatch(getIngredients());
-  }, [dispatch]);
-
-  const ingredients = useSelector((store) => store.ingredients.items);
+    if (ingredients.length === 0) dispatch(getIngredients());
+  }, [dispatch, ingredients]);
 
   const [currentType, setCurrentType] = useState("");
   const bunRef = useRef(null);

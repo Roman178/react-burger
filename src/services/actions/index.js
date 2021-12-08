@@ -1,17 +1,30 @@
 import * as types from "./actionTypes";
-import { fetchIngredients } from "../../api/api";
+import { fetchIngredients, createOrderApi } from "../../api/api";
 
 export const getIngredients = () => {
   return async function (dispatch) {
     dispatch({ type: types.GET_INGREDIENTS_REQUEST });
 
-    fetchIngredients()
-      .then((items) => {
-        if (items) dispatch({ type: types.GET_INGREDIENTS_SUCCESS, items });
-      })
-      .catch((err) => {
-        dispatch({ type: types.GET_INGREDIENTS_FAILED });
-        console.error("Error in getIngredients thunk ", err.message);
-      });
+    try {
+      const items = await fetchIngredients();
+      dispatch({ type: types.GET_INGREDIENTS_SUCCESS, items });
+    } catch (err) {
+      dispatch({ type: types.GET_INGREDIENTS_FAILED });
+      console.error("Error in getIngredients thunk ", err);
+    }
+  };
+};
+
+export const createOrder = (ingredients) => {
+  return async function (dispatch) {
+    dispatch({ type: types.CREATE_ORDER_REQUEST });
+
+    try {
+      const order = await createOrderApi(ingredients);
+      dispatch({ type: types.CREATE_ORDER_SUCCESS });
+    } catch (err) {
+      dispatch({ type: types.CREATE_ORDER_FAILED });
+      console.error("Error in createOrder thunk ", err);
+    }
   };
 };

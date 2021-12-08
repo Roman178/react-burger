@@ -1,21 +1,27 @@
 import { BASE_URL } from "../constants/constants";
 
-export const fetchIngredients = async () => {
+export const fetchIngredients = () => {
   return fetch(BASE_URL)
     .then((res) => {
-      console.log(res);
-
       if (res.ok) return res.json();
-      return Promise.reject();
+      return Promise.reject(res);
     })
     .then(({ data }) => data)
-    .catch((err) => err);
+    .catch((err) => Promise.reject(err));
+};
 
-  // try {
-  //   const res = await fetch(BASE_URL);
-  //   const { data } = await res.json();
-  //   return data;
-  // } catch (error) {
-  //   return new Error(error);
-  // }
+export const createOrderApi = (ingredients) => {
+  return fetch(BASE_URL, {
+    method: "POST",
+    body: JSON.stringify(ingredients),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => {
+      if (res.ok) return res.json();
+      return Promise.reject(res);
+    })
+    .then(({ data }) => data)
+    .catch((err) => Promise.reject(err));
 };

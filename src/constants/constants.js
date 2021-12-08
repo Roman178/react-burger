@@ -1,4 +1,4 @@
-const BASE_URL = "https://norma.nomoreparties.space/api/ingredientss";
+const BASE_URL = "https://norma.nomoreparties.space/api/ingredients";
 
 const BUN = "bun";
 const SAUCE = "sauce";
