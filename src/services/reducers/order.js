@@ -22,6 +22,9 @@ export const orderReducer = (state = initialState, action) => {
     case types.CREATE_ORDER_FAILED: {
       return { ...state, orderRequest: false, orderFailed: true };
     }
+    case types.REMOVE_ORDER: {
+      return initialState;
+    }
     default:
       return state;
   }

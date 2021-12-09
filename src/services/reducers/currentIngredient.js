@@ -7,6 +7,9 @@ export const currentIngredientReducer = (state = initialState, action) => {
     case types.SET_CURRENT_INGREDIENT: {
       return action.currentIngredient;
     }
+    case types.REMOVE_CURRENT_INGREDIENT: {
+      return initialState;
+    }
     default:
       return state;
   }

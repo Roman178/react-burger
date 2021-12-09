@@ -19,11 +19,19 @@ import {
 } from "../../constants/constants";
 import { getIngredients } from "../../services/actions";
 import * as types from "../../services/actions/actionTypes";
+import { useDrag } from "react-dnd";
 
 const IngredientCard = ({ ingredient }) => {
   const { isOpenModal, closeModal, openModal } = useModal();
-
   const dispatch = useDispatch();
+
+  const [, dragRef] = useDrag({
+    type: "ingredient",
+    item: ingredient,
+    collect: (monitor) => ({
+      isDrag: monitor.isDragging(),
+    }),
+  });
 
   const setIngredient = () => {
     dispatch({
@@ -33,15 +41,20 @@ const IngredientCard = ({ ingredient }) => {
     openModal();
   };
 
+  const closeModalWithDispatch = () => {
+    dispatch({ type: types.REMOVE_CURRENT_INGREDIENT });
+    closeModal();
+  };
+
   return (
     <>
       {isOpenModal && (
-        <Modal closeModal={closeModal}>
+        <Modal closeModal={closeModalWithDispatch}>
           <IngredientDetails {...ingredient} />
         </Modal>
       )}
 
-      <li className={css.card} onClick={() => setIngredient()}>
+      <li ref={dragRef} className={css.card} onClick={() => setIngredient()}>
         <img src={ingredient.image} alt={ingredient.name} />
         <div className={css.priceBox}>
           <span className="text text_type_digits-default mr-2">

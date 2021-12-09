@@ -7,6 +7,8 @@ import css from "./app.module.css";
 import { BASE_URL } from "../../constants/constants";
 import { InfoIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import Spinner from "../spinner/spinner";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 function App() {
   const error = useSelector((store) => store.ingredients.ingredientsFailed);
@@ -23,8 +25,10 @@ function App() {
           <main className={css.content}>
             {!error ? (
               <>
-                <BurgerIngredients />
-                <BurgerConstructor />
+                <DndProvider backend={HTML5Backend}>
+                  <BurgerIngredients />
+                  <BurgerConstructor />
+                </DndProvider>
               </>
             ) : (
               <p className="text text_type_main-default mt-10">
