@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useCallback } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { ingredientType } from "../../types/index";
 import css from "./burger-constructor.module.css";
@@ -15,7 +15,83 @@ import cn from "classnames";
 import { useSelector, useDispatch } from "react-redux";
 import * as types from "../../services/actions/actionTypes";
 import { createOrder as createOrderAction } from "../../services/actions/index";
-import { useDrop } from "react-dnd";
+import { useDrop, useDrag } from "react-dnd";
+import update from "immutability-helper";
+
+const AddedBurgerIngredient = ({
+  name,
+  image,
+  price,
+  index,
+  moveIngredient,
+  id,
+  removeIngredient,
+  ingredientCreatedAt,
+}) => {
+  const ref = useRef(null);
+  const [{ handlerId }, drop] = useDrop({
+    accept: "burgerIngredient",
+    collect(monitor) {
+      return {
+        handlerId: monitor.getHandlerId(),
+      };
+    },
+    hover(item, monitor) {
+      if (!ref.current) {
+        return;
+      }
+      const dragIndex = item.index;
+      const hoverIndex = index;
+      if (dragIndex === hoverIndex) {
+        return;
+      }
+      const hoverBoundingRect = ref.current?.getBoundingClientRect();
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const clientOffset = monitor.getClientOffset();
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+        return;
+      }
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+        return;
+      }
+      moveIngredient(dragIndex, hoverIndex);
+      item.index = hoverIndex;
+    },
+  });
+  const [{ isDragging }, drag] = useDrag({
+    type: "burgerIngredient",
+    item: () => {
+      return { id, index };
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+  const opacity = isDragging ? 0 : 1;
+  drag(drop(ref));
+
+  return (
+    <div
+      key={name}
+      className={css.elemetWrapper}
+      ref={ref}
+      style={{ opacity }}
+      data-handler-id={handlerId}
+    >
+      <div className="mr-2">
+        <DragIcon />
+      </div>
+      <ConstructorElement
+        text={name}
+        thumbnail={image}
+        price={price}
+        handleClose={() => removeIngredient(ingredientCreatedAt)}
+      />
+    </div>
+  );
+};
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
@@ -47,7 +123,7 @@ const BurgerConstructor = () => {
         ? dispatch({ type: types.ADD_BUN_BURGER, bun: ingredient })
         : dispatch({
             type: types.ADD_INGREDIENT_BURGER,
-            addedIngredient: ingredient,
+            addedIngredient: { ...ingredient, createdAt: +new Date() },
           });
     },
   });
@@ -57,11 +133,6 @@ const BurgerConstructor = () => {
     closeModal();
   };
 
-  const totalCount = ingredients.reduce(
-    (sum, current) => sum + current.price,
-    0
-  );
-
   const createOrder = () => {
     dispatch(
       createOrderAction({
@@ -70,6 +141,34 @@ const BurgerConstructor = () => {
     );
     openModal();
   };
+
+  const moveIngredient = useCallback(
+    (dragIndex, hoverIndex) => {
+      const dragIngredient = burgerIngredients[dragIndex];
+      dispatch({
+        type: types.SORT_INGREDIENTS_BURGER,
+        sortedIngredients: update(burgerIngredients, {
+          $splice: [
+            [dragIndex, 1],
+            [hoverIndex, 0, dragIngredient],
+          ],
+        }),
+      });
+    },
+    [burgerIngredients, dispatch]
+  );
+
+  const removeIngredient = (removedCreatedAt) => {
+    dispatch({
+      type: types.REMOVE_INGREDIENT_BURGER,
+      removedCreatedAt,
+    });
+  };
+
+  const totalCount = ingredients.reduce(
+    (sum, current) => sum + current.price,
+    0
+  );
 
   return (
     <>
@@ -105,18 +204,18 @@ const BurgerConstructor = () => {
           />
         </div>
         <div className={css.elements}>
-          {burgerIngredients.map((ingredient) => (
-            <div key={ingredient.name} className={css.elemetWrapper}>
-              <div className="mr-2">
-                <DragIcon />
-              </div>
-              <ConstructorElement
-                text={ingredient.name}
-                thumbnail={ingredient.image}
-                price={ingredient.price}
-                handleClose={() => dispatch()}
-              />
-            </div>
+          {burgerIngredients.map((ingredient, i) => (
+            <AddedBurgerIngredient
+              name={ingredient.name}
+              image={ingredient.image}
+              price={ingredient.price}
+              index={i}
+              moveIngredient={moveIngredient}
+              id={ingredient._id}
+              key={ingredient.createdAt}
+              ingredientCreatedAt={ingredient.createdAt}
+              removeIngredient={removeIngredient}
+            />
           ))}
         </div>
         <div className={cn(css.elemetWrapper, "mt-4", "pr-4")}>

@@ -17,9 +17,12 @@ export const burgerIngredientsReducer = (state = initialState, action) => {
       return {
         ...state,
         items: [...state.items].filter(
-          (item) => item.id !== action.removedItemId
+          (item) => item.createdAt !== action.removedCreatedAt
         ),
       };
+    }
+    case types.SORT_INGREDIENTS_BURGER: {
+      return { ...state, items: action.sortedIngredients };
     }
     default:
       return state;
