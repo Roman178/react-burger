@@ -28,6 +28,7 @@ const AddedBurgerIngredient = ({
   removeIngredient,
   ingredientCreatedAt,
 }) => {
+  // sorting example from react-dnd
   const ref = useRef(null);
   const [{ handlerId }, drop] = useDrop({
     accept: "burgerIngredient",
@@ -136,7 +137,7 @@ const BurgerConstructor = () => {
   const createOrder = () => {
     dispatch(
       createOrderAction({
-        ingredients: burgerIngredients.map((i) => i._id),
+        ingredients: [...burgerIngredients.map((i) => i._id), selectedBun._id],
       })
     );
     openModal();
@@ -165,10 +166,9 @@ const BurgerConstructor = () => {
     });
   };
 
-  const totalCount = ingredients.reduce(
-    (sum, current) => sum + current.price,
-    0
-  );
+  const totalCount =
+    burgerIngredients.reduce((sum, current) => sum + current.price, 0) +
+    selectedBun?.price * 2;
 
   return (
     <>
@@ -235,7 +235,7 @@ const BurgerConstructor = () => {
                 "text text_type_digits-medium"
               )}
             >
-              {totalCount}
+              {!isNaN(totalCount) && totalCount}
             </p>
             <CurrencyIcon />
           </div>

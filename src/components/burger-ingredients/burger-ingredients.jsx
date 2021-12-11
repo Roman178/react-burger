@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useRef, useEffect } from "react";
+import React, { useState, forwardRef, useRef, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { ingredientType } from "../../types/index";
@@ -73,8 +73,12 @@ const IngredientCard = ({ ingredient }) => {
 const IngredientsBlock = forwardRef(
   ({ ingredientTitle, filteredIngredients }, ref) => {
     return (
-      <div className="mb-10">
-        <h3 className="text text_type_main-medium mb-6" ref={ref}>
+      <div className="pb-10">
+        <h3
+          style={{ backgroundColor: "aqua" }}
+          className="text text_type_main-medium mb-6"
+          ref={ref}
+        >
           {ingredientTitle}
         </h3>
         <ul className={css.cards}>
