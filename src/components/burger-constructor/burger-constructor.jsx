@@ -141,6 +141,7 @@ const BurgerConstructor = () => {
       })
     );
     openModal();
+    dispatch({ type: types.REMOVE_ALL_INGREDIENTS_BURGER });
   };
 
   const moveIngredient = useCallback(

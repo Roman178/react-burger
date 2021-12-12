@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import css from "./app.module.css";
-import { BASE_URL } from "../../constants/constants";
 import { InfoIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import Spinner from "../spinner/spinner";
 import { DndProvider } from "react-dnd";

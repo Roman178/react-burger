@@ -1,4 +1,10 @@
-import React, { useState, forwardRef, useRef, useEffect, useMemo } from "react";
+import React, {
+  useState,
+  forwardRef,
+  useRef,
+  useEffect,
+  useCallback,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { ingredientType } from "../../types/index";
@@ -74,11 +80,7 @@ const IngredientsBlock = forwardRef(
   ({ ingredientTitle, filteredIngredients }, ref) => {
     return (
       <div className="pb-10">
-        <h3
-          style={{ backgroundColor: "aqua" }}
-          className="text text_type_main-medium mb-6"
-          ref={ref}
-        >
+        <h3 className="text text_type_main-medium mb-6" ref={ref}>
           {ingredientTitle}
         </h3>
         <ul className={css.cards}>
@@ -99,7 +101,7 @@ const BurgerIngredients = () => {
     if (ingredients.length === 0) dispatch(getIngredients());
   }, [dispatch, ingredients]);
 
-  const [currentType, setCurrentType] = useState("");
+  const [currentType, setCurrentType] = useState(BUN);
   const bunRef = useRef(null);
   const sauceRef = useRef(null);
   const mainRef = useRef(null);
@@ -108,6 +110,40 @@ const BurgerIngredients = () => {
     [`${SAUCE}Ref`]: sauceRef,
     [`${MAIN_INGREDIENT}Ref`]: mainRef,
   };
+
+  const handleScroll = useCallback(
+    (e) => {
+      const mainBlockTopCoordinate = e.target.getBoundingClientRect().top;
+
+      const getCoordinates = (ref) => {
+        return {
+          top: ref.current.parentNode.getBoundingClientRect().top,
+          bottom: ref.current.parentNode.getBoundingClientRect().bottom,
+        };
+      };
+
+      const isCurrentScrollingBlock = (coordinates, ingredientType) => {
+        return (
+          coordinates.top <= mainBlockTopCoordinate &&
+          coordinates.bottom > mainBlockTopCoordinate &&
+          currentType !== ingredientType
+        );
+      };
+
+      const bunCoordinates = getCoordinates(bunRef);
+      const sauceCoordinates = getCoordinates(sauceRef);
+      const mainCoordinates = getCoordinates(mainRef);
+
+      return isCurrentScrollingBlock(bunCoordinates, BUN)
+        ? setCurrentType(BUN)
+        : isCurrentScrollingBlock(sauceCoordinates, SAUCE)
+        ? setCurrentType(SAUCE)
+        : isCurrentScrollingBlock(mainCoordinates, MAIN_INGREDIENT)
+        ? setCurrentType(MAIN_INGREDIENT)
+        : undefined;
+    },
+    [currentType]
+  );
 
   const handleTabClick = (type) => {
     setCurrentType(type);
@@ -129,7 +165,7 @@ const BurgerIngredients = () => {
           </Tab>
         ))}
       </div>
-      <div className={css.ingredientsRoot}>
+      <div className={css.ingredientsRoot} onScroll={handleScroll}>
         {Object.keys(translate).map((ingredientType) => (
           <IngredientsBlock
             ref={refs[`${ingredientType}Ref`]}

@@ -24,6 +24,9 @@ export const burgerIngredientsReducer = (state = initialState, action) => {
     case types.SORT_INGREDIENTS_BURGER: {
       return { ...state, items: action.sortedIngredients };
     }
+    case types.REMOVE_ALL_INGREDIENTS_BURGER: {
+      return { ...state, items: [] };
+    }
     default:
       return state;
   }
