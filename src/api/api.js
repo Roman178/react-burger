@@ -1,11 +1,13 @@
 import { BASE_URL } from "../constants/constants";
 
+const checkResponse = (response) => {
+  if (response.ok) return response.json();
+  return Promise.reject(response);
+};
+
 export const fetchIngredients = () => {
   return fetch(`${BASE_URL}/ingredients`)
-    .then((res) => {
-      if (res.ok) return res.json();
-      return Promise.reject(res);
-    })
+    .then(checkResponse)
     .then(({ data }) => data)
     .catch((err) => Promise.reject(err));
 };
@@ -18,10 +20,7 @@ export const createOrderApi = (ingredients) => {
       "Content-Type": "application/json",
     },
   })
-    .then((res) => {
-      if (res.ok) return res.json();
-      return Promise.reject(res);
-    })
+    .then(checkResponse)
     .then((data) => data)
     .catch((err) => Promise.reject(err));
 };

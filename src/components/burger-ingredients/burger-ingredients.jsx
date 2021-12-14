@@ -29,14 +29,15 @@ import { useDrag } from "react-dnd";
 
 const IngredientCard = ({ ingredient }) => {
   const { isOpenModal, closeModal, openModal } = useModal();
+  const ingredientQty = useSelector(
+    (store) =>
+      store.burgerIngredients.quantity.find((i) => i.id === ingredient._id)?.qty
+  );
   const dispatch = useDispatch();
 
   const [, dragRef] = useDrag({
     type: "ingredient",
     item: ingredient,
-    collect: (monitor) => ({
-      isDrag: monitor.isDragging(),
-    }),
   });
 
   const setIngredient = () => {
@@ -61,6 +62,13 @@ const IngredientCard = ({ ingredient }) => {
       )}
 
       <li ref={dragRef} className={css.card} onClick={() => setIngredient()}>
+        {ingredientQty && (
+          <span
+            className={cn(css.quantity, "text text_type_digits-default mr-2")}
+          >
+            {ingredientQty}
+          </span>
+        )}
         <img src={ingredient.image} alt={ingredient.name} />
         <div className={css.priceBox}>
           <span className="text text_type_digits-default mr-2">
@@ -189,10 +197,6 @@ IngredientsBlock.propTypes = {
   filteredIngredients: PropTypes.arrayOf(PropTypes.exact(ingredientType))
     .isRequired,
   ingredientTitle: PropTypes.string.isRequired,
-};
-
-BurgerIngredients.propTypes = {
-  ingredients: PropTypes.arrayOf(PropTypes.exact(ingredientType)).isRequired,
 };
 
 export default BurgerIngredients;

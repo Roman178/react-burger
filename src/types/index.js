@@ -13,6 +13,7 @@ const ingredientType = {
   image_mobile: string,
   image_large: string,
   __v: number,
+  createdAt: number,
 };
 
 export { ingredientType };

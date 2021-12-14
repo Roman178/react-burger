@@ -1,7 +1,6 @@
 import React from "react";
 import cn from "classnames";
 import css from "./ingredient-details.module.css";
-import { ingredientType } from "../../types";
 import { useSelector } from "react-redux";
 
 const IngredientDetails = () => {
@@ -58,7 +57,5 @@ const IngredientDetails = () => {
     </div>
   );
 };
-
-IngredientDetails.propTypes = ingredientType;
 
 export default IngredientDetails;
