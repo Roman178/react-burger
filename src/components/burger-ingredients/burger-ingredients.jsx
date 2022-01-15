@@ -1,4 +1,11 @@
-import React, { useState, forwardRef, useRef } from "react";
+import React, {
+  useState,
+  forwardRef,
+  useRef,
+  useEffect,
+  useCallback,
+} from "react";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { ingredientType } from "../../types/index";
 import {
@@ -16,19 +23,52 @@ import {
   MAIN_INGREDIENT,
   translate,
 } from "../../constants/constants";
+import { getIngredients } from "../../services/actions";
+import * as types from "../../services/actions/actionTypes";
+import { useDrag } from "react-dnd";
 
 const IngredientCard = ({ ingredient }) => {
   const { isOpenModal, closeModal, openModal } = useModal();
+  const ingredientQty = useSelector(
+    (store) =>
+      store.burgerIngredients.quantity.find((i) => i.id === ingredient._id)?.qty
+  );
+  const dispatch = useDispatch();
+
+  const [, dragRef] = useDrag({
+    type: "ingredient",
+    item: ingredient,
+  });
+
+  const setIngredient = () => {
+    dispatch({
+      type: types.SET_CURRENT_INGREDIENT,
+      currentIngredient: ingredient,
+    });
+    openModal();
+  };
+
+  const closeModalWithDispatch = () => {
+    dispatch({ type: types.REMOVE_CURRENT_INGREDIENT });
+    closeModal();
+  };
 
   return (
     <>
       {isOpenModal && (
-        <Modal closeModal={closeModal}>
+        <Modal closeModal={closeModalWithDispatch}>
           <IngredientDetails {...ingredient} />
         </Modal>
       )}
 
-      <li className={css.card} onClick={() => openModal()}>
+      <li ref={dragRef} className={css.card} onClick={() => setIngredient()}>
+        {ingredientQty && (
+          <span
+            className={cn(css.quantity, "text text_type_digits-default mr-2")}
+          >
+            {ingredientQty}
+          </span>
+        )}
         <img src={ingredient.image} alt={ingredient.name} />
         <div className={css.priceBox}>
           <span className="text text_type_digits-default mr-2">
@@ -47,7 +87,7 @@ const IngredientCard = ({ ingredient }) => {
 const IngredientsBlock = forwardRef(
   ({ ingredientTitle, filteredIngredients }, ref) => {
     return (
-      <div className="mb-10">
+      <div className="pb-10">
         <h3 className="text text_type_main-medium mb-6" ref={ref}>
           {ingredientTitle}
         </h3>
@@ -61,8 +101,15 @@ const IngredientsBlock = forwardRef(
   }
 );
 
-const BurgerIngredients = ({ ingredients }) => {
-  const [currentType, setCurrentType] = useState("");
+const BurgerIngredients = () => {
+  const dispatch = useDispatch();
+  const ingredients = useSelector((store) => store.ingredients.items);
+
+  useEffect(() => {
+    if (ingredients.length === 0) dispatch(getIngredients());
+  }, [dispatch, ingredients]);
+
+  const [currentType, setCurrentType] = useState(BUN);
   const bunRef = useRef(null);
   const sauceRef = useRef(null);
   const mainRef = useRef(null);
@@ -71,6 +118,40 @@ const BurgerIngredients = ({ ingredients }) => {
     [`${SAUCE}Ref`]: sauceRef,
     [`${MAIN_INGREDIENT}Ref`]: mainRef,
   };
+
+  const handleScroll = useCallback(
+    (e) => {
+      const mainBlockTopCoordinate = e.target.getBoundingClientRect().top;
+
+      const getCoordinates = (ref) => {
+        return {
+          top: ref.current.parentNode.getBoundingClientRect().top,
+          bottom: ref.current.parentNode.getBoundingClientRect().bottom,
+        };
+      };
+
+      const isCurrentScrollingBlock = (coordinates, ingredientType) => {
+        return (
+          coordinates.top <= mainBlockTopCoordinate &&
+          coordinates.bottom > mainBlockTopCoordinate &&
+          currentType !== ingredientType
+        );
+      };
+
+      const bunCoordinates = getCoordinates(bunRef);
+      const sauceCoordinates = getCoordinates(sauceRef);
+      const mainCoordinates = getCoordinates(mainRef);
+
+      return isCurrentScrollingBlock(bunCoordinates, BUN)
+        ? setCurrentType(BUN)
+        : isCurrentScrollingBlock(sauceCoordinates, SAUCE)
+        ? setCurrentType(SAUCE)
+        : isCurrentScrollingBlock(mainCoordinates, MAIN_INGREDIENT)
+        ? setCurrentType(MAIN_INGREDIENT)
+        : undefined;
+    },
+    [currentType]
+  );
 
   const handleTabClick = (type) => {
     setCurrentType(type);
@@ -92,7 +173,7 @@ const BurgerIngredients = ({ ingredients }) => {
           </Tab>
         ))}
       </div>
-      <div className={css.ingredientsRoot}>
+      <div className={css.ingredientsRoot} onScroll={handleScroll}>
         {Object.keys(translate).map((ingredientType) => (
           <IngredientsBlock
             ref={refs[`${ingredientType}Ref`]}
@@ -116,10 +197,6 @@ IngredientsBlock.propTypes = {
   filteredIngredients: PropTypes.arrayOf(PropTypes.exact(ingredientType))
     .isRequired,
   ingredientTitle: PropTypes.string.isRequired,
-};
-
-BurgerIngredients.propTypes = {
-  ingredients: PropTypes.arrayOf(PropTypes.exact(ingredientType)).isRequired,
 };
 
 export default BurgerIngredients;

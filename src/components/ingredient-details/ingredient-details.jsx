@@ -1,16 +1,18 @@
 import React from "react";
 import cn from "classnames";
 import css from "./ingredient-details.module.css";
-import { ingredientType } from "../../types";
+import { useSelector } from "react-redux";
 
-const IngredientDetails = ({
-  image_large,
-  name,
-  calories,
-  proteins,
-  fat,
-  carbohydrates,
-}) => {
+const IngredientDetails = () => {
+  const {
+    image_large,
+    name,
+    calories,
+    proteins,
+    fat,
+    carbohydrates,
+  } = useSelector((store) => store.currentIngredient);
+
   return (
     <div className={css.root}>
       <p className={cn(css.title, "text text_type_main-large")}>
@@ -55,7 +57,5 @@ const IngredientDetails = ({
     </div>
   );
 };
-
-IngredientDetails.propTypes = ingredientType;
 
 export default IngredientDetails;
