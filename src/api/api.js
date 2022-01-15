@@ -8,8 +8,7 @@ const checkResponse = (response) => {
 export const fetchIngredients = () => {
   return fetch(`${BASE_URL}/ingredients`)
     .then(checkResponse)
-    .then(({ data }) => data)
-    .catch((err) => Promise.reject(err));
+    .then(({ data }) => data);
 };
 
 export const createOrderApi = (ingredients) => {
@@ -21,6 +20,5 @@ export const createOrderApi = (ingredients) => {
     },
   })
     .then(checkResponse)
-    .then((data) => data)
-    .catch((err) => Promise.reject(err));
+    .then((data) => data);
 };
