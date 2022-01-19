@@ -1,17 +1,12 @@
-import React from "react";
+import React, { FC } from "react";
 import cn from "classnames";
 import css from "./ingredient-details.module.css";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/hooks";
+import { IIngredient } from "../../services/types/data";
 
-const IngredientDetails = () => {
-  const {
-    image_large,
-    name,
-    calories,
-    proteins,
-    fat,
-    carbohydrates,
-  } = useSelector((store) => store.currentIngredient);
+const IngredientDetails: FC = () => {
+  const { image_large, name, calories, proteins, fat, carbohydrates } =
+    useSelector((store) => store.currentIngredient as IIngredient);
 
   return (
     <div className={css.root}>

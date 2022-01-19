@@ -1,20 +1,19 @@
-import React, { useRef } from "react";
-import PropTypes from "prop-types";
+import React, { useRef, FC, MouseEvent } from "react";
 import css from "./modal-overlay.module.css";
 
-const ModalOverlay = ({ closeModal }) => {
+interface IModalOverlayProps {
+  closeModal: () => void;
+}
+
+const ModalOverlay: FC<IModalOverlayProps> = ({ closeModal }) => {
   const modalOverlayRef = useRef(null);
-  const handleClick = (e) => {
+  const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     if (e.target === modalOverlayRef.current) closeModal();
   };
 
   return (
     <div ref={modalOverlayRef} onClick={handleClick} className={css.root} />
   );
-};
-
-ModalOverlay.propTypes = {
-  closeModal: PropTypes.func.isRequired,
 };
 
 export default ModalOverlay;
