@@ -1,6 +1,7 @@
 import { BASE_URL } from "../constants/constants";
+import { IIngredient } from "../services/types/data";
 
-const checkResponse = (response) => {
+const checkResponse = (response: Response): Promise<any> => {
   if (response.ok) return response.json();
   return Promise.reject(response);
 };
@@ -11,7 +12,9 @@ export const fetchIngredients = () => {
     .then(({ data }) => data);
 };
 
-export const createOrderApi = (ingredients) => {
+export const createOrderApi = (
+  ingredients: Array<IIngredient["_id"]>
+): Promise<any> => {
   return fetch(`${BASE_URL}/orders`, {
     method: "POST",
     body: JSON.stringify(ingredients),
