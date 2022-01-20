@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import cn from "classnames";
 import css from "./app-header.module.css";
 import {
@@ -8,13 +8,13 @@ import {
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-const AppHeader = () => {
+const AppHeader: FC = () => {
   return (
     <header className={css.header}>
       <nav className={css.nav}>
         <ul className={css.navList}>
           <li className={cn(css.listItem, "pl-5", "pr-5")}>
-            <BurgerIcon />
+            <BurgerIcon type="primary" />
             <a
               href="/"
               className={cn(

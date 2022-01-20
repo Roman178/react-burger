@@ -1,13 +1,16 @@
-import React, { useCallback, useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useCallback, useEffect, FC } from "react";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { createPortal } from "react-dom";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 import css from "./modal.module.css";
 
-const modalRoot = document.getElementById("react-modals");
+const modalRoot = document.getElementById("react-modals") as HTMLDivElement;
 
-const Modal = ({ children, closeModal }) => {
+interface IModalProps {
+  closeModal: () => void;
+}
+
+const Modal: FC<IModalProps> = ({ children, closeModal }) => {
   const handleKeyDown = useCallback(
     (e) => {
       if (e.key === "Escape") closeModal();
@@ -32,11 +35,6 @@ const Modal = ({ children, closeModal }) => {
     </>,
     modalRoot
   );
-};
-
-Modal.propTypes = {
-  children: PropTypes.element.isRequired,
-  closeModal: PropTypes.func.isRequired,
 };
 
 export default Modal;

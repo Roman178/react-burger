@@ -1,8 +1,8 @@
-const BASE_URL = "https://norma.nomoreparties.space/api";
+const BASE_URL: string = "https://norma.nomoreparties.space/api";
 
-const BUN = "bun";
-const SAUCE = "sauce";
-const MAIN_INGREDIENT = "main";
+const BUN: string = "bun";
+const SAUCE: string = "sauce";
+const MAIN_INGREDIENT: string = "main";
 
 const translate = {
   [BUN]: "Булки",

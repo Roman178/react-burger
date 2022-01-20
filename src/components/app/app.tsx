@@ -1,5 +1,5 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { FC } from "react";
+import { useSelector } from "../../services/hooks";
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
@@ -9,7 +9,7 @@ import Spinner from "../spinner/spinner";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
-function App() {
+const App: FC = () => {
   const error = useSelector((store) => store.ingredients.ingredientsFailed);
   const loading = useSelector((store) => store.ingredients.ingredientsRequest);
 
@@ -40,6 +40,6 @@ function App() {
       </div>
     </>
   );
-}
+};
 
 export default App;

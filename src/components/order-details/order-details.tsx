@@ -1,11 +1,11 @@
-import React from "react";
+import React, { FC } from "react";
 import orderSuccess from "../../images/order-success.png";
 import css from "./order-details.module.css";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/hooks";
 import Spinner from "../spinner/spinner";
 import { InfoIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
-const OrderDetails = () => {
+const OrderDetails: FC = () => {
   const orderNumber = useSelector(
     (store) => store.order.currentOrder.order?.number
   );
