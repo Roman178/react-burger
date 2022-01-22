@@ -57,8 +57,8 @@ const BurgerIngredients: FC = () => {
         ingredientType: string
       ) => {
         return (
-          coordinates.top <= mainBlockTopCoordinate &&
-          coordinates.bottom > mainBlockTopCoordinate &&
+          Math.round(coordinates.top) <= Math.round(mainBlockTopCoordinate) &&
+          Math.round(coordinates.bottom) > Math.round(mainBlockTopCoordinate) &&
           currentType !== ingredientType
         );
       };
@@ -79,7 +79,6 @@ const BurgerIngredients: FC = () => {
   );
 
   const handleTabClick = (type: string) => {
-    setCurrentType(type);
     refs[`${type}Ref`]?.current?.scrollIntoView();
   };
 
