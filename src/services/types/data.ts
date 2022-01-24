@@ -21,3 +21,24 @@ export interface IOrder {
     number: number;
   };
 }
+
+export interface IUserSignupRequest {
+  email: string;
+  password: string;
+  name: string;
+}
+
+export interface IUserLoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface IUserLoginResponse {
+  success?: boolean;
+  user?: {
+    email: string;
+    name: string;
+  };
+  accessToken?: string;
+  refreshToken?: string;
+}

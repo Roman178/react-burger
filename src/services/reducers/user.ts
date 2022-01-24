@@ -1,0 +1,89 @@
+import * as c from "../constants";
+import { TUserActions } from "../actions/user";
+import { IUserSignupRequest, IUserLoginResponse } from "../types/data";
+
+type TUserState = {
+  currentUser: IUserLoginResponse;
+  userSignup: {
+    userSignupRequest: boolean;
+    userSignupFailed: { status: boolean; message: string };
+  };
+  userLogin: {
+    userLoginRequest: boolean;
+    userLoginFailed: { status: boolean; message: string };
+  };
+  isLoggedIn: boolean;
+};
+
+const userInitialState: TUserState = {
+  currentUser: {},
+  userSignup: {
+    userSignupRequest: false,
+    userSignupFailed: { status: false, message: "" },
+  },
+  userLogin: {
+    userLoginRequest: false,
+    userLoginFailed: { status: false, message: "" },
+  },
+  isLoggedIn: false,
+};
+
+export const userReducer = (state = userInitialState, action: TUserActions) => {
+  switch (action.type) {
+    case c.SIGNUP_USER_REQUEST: {
+      return {
+        ...state,
+        userSignup: {
+          userSignupRequest: true,
+          userSignupFailed: { status: false, message: "" },
+        },
+      };
+    }
+    case c.SIGNUP_USER_FAILED: {
+      return {
+        ...state,
+        userSignup: {
+          userSignupRequest: false,
+          userSignupFailed: { status: true, message: action.errorMessage },
+        },
+        isLoggedIn: false,
+      };
+    }
+    case c.LOGIN_USER_REQUEST: {
+      return {
+        ...state,
+        userLogin: {
+          userLoginRequest: true,
+          userLoginFailed: { status: false, message: "" },
+        },
+      };
+    }
+    case c.LOGIN_USER_FAILED: {
+      return {
+        ...state,
+        userLogin: {
+          userLoginRequest: false,
+          userLoginFailed: { status: true, message: action.errorMessage },
+        },
+        isLoggedIn: false,
+      };
+    }
+    case c.LOGIN_USER_SUCCESS: {
+      return {
+        ...state,
+        currentUser: action.user,
+        userSignup: {
+          userSignupRequest: false,
+          userSignupFailed: { status: false, message: "" },
+        },
+        userLogin: {
+          userLoginRequest: false,
+          userLoginFailed: { status: false, message: "" },
+        },
+        isLoggedIn: true,
+      };
+    }
+    default:
+      return state;
+  }
+};

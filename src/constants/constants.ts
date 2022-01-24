@@ -10,4 +10,15 @@ const translate = {
   [MAIN_INGREDIENT]: "Начинки",
 };
 
-export { BASE_URL, BUN, SAUCE, MAIN_INGREDIENT, translate };
+const ACCESS_TOKEN = "accessToken";
+const REFRESH_TOKEN = "refreshToken";
+
+export {
+  BASE_URL,
+  BUN,
+  SAUCE,
+  MAIN_INGREDIENT,
+  translate,
+  ACCESS_TOKEN,
+  REFRESH_TOKEN,
+};
