@@ -34,11 +34,22 @@ export interface IUserLoginRequest {
 }
 
 export interface IUserLoginResponse {
-  success?: boolean;
-  user?: {
+  success: boolean;
+  user: {
     email: string;
     name: string;
   };
   accessToken?: string;
   refreshToken?: string;
+}
+
+export type IUserTokenResponse = Omit<
+  IUserLoginResponse,
+  "accessToken" | "refreshToken"
+>;
+
+export interface ITokensResponse {
+  success: boolean;
+  accessToken: string;
+  refreshToken: string;
 }

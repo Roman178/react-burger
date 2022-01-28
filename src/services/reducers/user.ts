@@ -16,7 +16,13 @@ type TUserState = {
 };
 
 const userInitialState: TUserState = {
-  currentUser: {},
+  currentUser: {
+    success: false,
+    user: {
+      email: "",
+      name: "",
+    },
+  },
   userSignup: {
     userSignupRequest: false,
     userSignupFailed: { status: false, message: "" },
@@ -81,6 +87,19 @@ export const userReducer = (state = userInitialState, action: TUserActions) => {
           userLoginFailed: { status: false, message: "" },
         },
         isLoggedIn: true,
+      };
+    }
+    case c.LOGOUT_USER_SUCCESS: {
+      return {
+        ...state,
+        currentUser: {
+          success: false,
+          user: {
+            email: "",
+            name: "",
+          },
+        },
+        isLoggedIn: false,
       };
     }
     default:

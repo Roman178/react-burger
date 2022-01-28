@@ -4,24 +4,36 @@ import { signupThunk } from "../../services/actions/user";
 import { toast } from "react-toastify";
 import { connect } from "react-redux";
 import { AppThunk } from "../../services/types";
+import { IUserLoginResponse } from "../../services/types/data";
+import { useCookies } from "react-cookie";
+import { Redirect, useHistory } from "react-router-dom";
+import { useSelector } from "../../services/hooks";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants/constants";
 
 interface ISignupProps {
   signup?: AppThunk;
 }
 
 const Signup: FC<ISignupProps> = ({ signup }) => {
+  const [, setCookie] = useCookies([ACCESS_TOKEN, REFRESH_TOKEN]);
+  const history = useHistory();
+  const userIsLoggedIn = useSelector((store) => store.user.isLoggedIn);
   const handleSubmit = async (values: any) => {
     try {
-      const user = await signup!(values);
-      console.log(user);
+      const response: any = signup!(values);
+      const user: IUserLoginResponse = await response;
+      setCookie(ACCESS_TOKEN, user.accessToken, { path: "/" });
+      setCookie(REFRESH_TOKEN, user.refreshToken, { path: "/" });
+      history.replace({ pathname: "/profile" });
+      toast.success("Вы успешно вошли");
     } catch (error: any) {
-      toast.error(error.message, {
-        position: toast.POSITION.TOP_RIGHT,
-      });
+      toast.error(error.message);
     }
   };
 
-  return (
+  return userIsLoggedIn ? (
+    <Redirect to="/profile" />
+  ) : (
     <Form
       title="Регистрация"
       inputs={[

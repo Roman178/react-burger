@@ -1,11 +1,19 @@
-import { loginApi, signupApi } from "../../api/api";
+import {
+  loginApi,
+  signupApi,
+  logoutApi,
+  authAccessTokenApi,
+  authRefreshTokenApi,
+} from "../../api/api";
 import * as c from "../constants";
 import { AppDispatch, AppThunk } from "../types";
 import {
   IUserSignupRequest,
   IUserLoginResponse,
   IUserLoginRequest,
+  IUserTokenResponse,
 } from "../types/data";
+import { handleThunkError } from "../utils";
 
 export interface ISignupRequest {
   readonly type: typeof c.SIGNUP_USER_REQUEST;
@@ -30,12 +38,17 @@ export interface ILoginSuccess {
   readonly user: IUserLoginResponse;
 }
 
+export interface ILogoutSuccess {
+  readonly type: typeof c.LOGOUT_USER_SUCCESS;
+}
+
 export type TUserActions =
   | ISignupRequest
   | ISignupFailed
   | ILoginRequest
   | ILoginSuccess
-  | ILoginFailed;
+  | ILoginFailed
+  | ILogoutSuccess;
 
 export const signupRequest = (): ISignupRequest => ({
   type: c.SIGNUP_USER_REQUEST,
@@ -60,48 +73,80 @@ export const loginSuccess = (user: IUserLoginResponse): ILoginSuccess => ({
   user,
 });
 
+export const logoutSuccess = (): ILogoutSuccess => ({
+  type: c.LOGOUT_USER_SUCCESS,
+});
+
 export const signupThunk: AppThunk = (user: IUserSignupRequest) => {
   return async (dispatch: AppDispatch) => {
     dispatch(signupRequest());
+
     return signupApi(user)
-      .then((userData) => {
-        dispatch(loginSuccess(userData));
+      .then((userData: IUserLoginResponse) => {
+        dispatch(
+          loginSuccess({
+            success: userData.success,
+            user: { email: userData.user.email, name: userData.user.name },
+          })
+        );
         return userData;
       })
-      .catch(async (err) => {
-        if (err.status === 500) {
-          dispatch(signupFailed("Server error"));
-          return Promise.reject({ message: "Server error" });
-        } else {
-          const error = await err.json().then((parsedError: any) => {
-            dispatch(signupFailed(parsedError.message));
-            return parsedError;
-          });
-          return Promise.reject(error);
-        }
-      });
+      .catch((err) => handleThunkError(err, dispatch, signupFailed));
   };
 };
 
 export const loginThunk: AppThunk = (user: IUserLoginRequest) => {
   return async (dispatch: AppDispatch) => {
     dispatch(loginRequest());
+
     return loginApi(user)
-      .then((userData) => {
+      .then((userData: IUserLoginResponse) => {
+        dispatch(
+          loginSuccess({
+            success: userData.success,
+            user: { email: userData.user!.email, name: userData.user!.name },
+          })
+        );
+        return userData;
+      })
+      .catch((err) => handleThunkError(err, dispatch, loginFailed));
+  };
+};
+
+export const logoutThunk: AppThunk = (refreshToken: string) => {
+  return async (dispatch: AppDispatch) => {
+    return logoutApi(refreshToken)
+      .then(() => {
+        dispatch(logoutSuccess());
+      })
+      .catch(() => dispatch(logoutSuccess()));
+  };
+};
+
+export const authAccessTokenThunk: AppThunk = (accessToken: string) => {
+  return async (dispatch: AppDispatch) => {
+    dispatch(loginRequest());
+
+    return authAccessTokenApi(accessToken)
+      .then((userData: IUserTokenResponse) => {
         dispatch(loginSuccess(userData));
         return userData;
       })
-      .catch(async (err) => {
-        if (err.status === 500) {
-          dispatch(loginFailed("Server error"));
-          return Promise.reject({ message: "Server error" });
-        } else {
-          const error = await err.json().then((parsedError: any) => {
-            dispatch(loginFailed(parsedError.message));
-            return parsedError;
-          });
-          return Promise.reject(error);
-        }
-      });
+      .catch((err) => Promise.reject(err));
+  };
+};
+
+export const authRefreshTokenThunk: AppThunk = (refreshToken: string) => {
+  return async (dispatch: AppDispatch) => {
+    dispatch(loginRequest());
+
+    return authRefreshTokenApi(refreshToken).then((tokenData) =>
+      authAccessTokenApi(tokenData.accessToken)
+        .then((userData: IUserTokenResponse) => {
+          dispatch(loginSuccess(userData));
+          return tokenData;
+        })
+        .catch((err) => Promise.reject(err))
+    );
   };
 };

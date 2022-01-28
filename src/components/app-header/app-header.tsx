@@ -7,6 +7,7 @@ import {
   ListIcon,
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Link } from "react-router-dom";
 
 const AppHeader: FC = () => {
   return (
@@ -42,15 +43,25 @@ const AppHeader: FC = () => {
           </li>
           <li className={cn(css.listItem, "pl-5", "pr-5")}>
             <ProfileIcon type="secondary" />
-            <a
-              href="/"
+
+            <Link
+              to="/profile"
               className={cn(
                 css.listItemLink,
                 "text text_type_main-default ml-2 text_color_inactive"
               )}
             >
               Личный кабинет
-            </a>
+            </Link>
+
+            {/* <a
+              href="/"
+              className={cn(
+                css.listItemLink,
+                "text text_type_main-default ml-2 text_color_inactive"
+              )}
+            >
+            </a> */}
           </li>
         </ul>
       </nav>

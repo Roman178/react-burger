@@ -12,6 +12,8 @@ const translate = {
 
 const ACCESS_TOKEN = "accessToken";
 const REFRESH_TOKEN = "refreshToken";
+const JWT_EXPIRED = "jwt expired";
+const SHOULD_BE_AUTH = "You should be authorised";
 
 export {
   BASE_URL,
@@ -21,4 +23,6 @@ export {
   translate,
   ACCESS_TOKEN,
   REFRESH_TOKEN,
+  JWT_EXPIRED,
+  SHOULD_BE_AUTH,
 };

@@ -6,48 +6,73 @@ import { connect } from "react-redux";
 import { AppThunk } from "../../services/types";
 import { useCookies } from "react-cookie";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants/constants";
+import {
+  Redirect,
+  useHistory,
+  useLocation,
+  useRouteMatch,
+} from "react-router-dom";
+import { useSelector } from "../../services/hooks";
+import { IUserLoginResponse } from "../../services/types/data";
+import Spinner from "../../components/spinner/spinner";
 
 interface ILoginProps {
   login?: AppThunk;
 }
 
-const Login: FC<ILoginProps> = ({ login }) => {
+const Login: FC<ILoginProps> = ({ login, ...other }) => {
   const [, setCookie] = useCookies([ACCESS_TOKEN, REFRESH_TOKEN]);
+  const history = useHistory();
+  const location = useLocation<any>();
+  const routeMatch = useRouteMatch();
+  const userIsLoggedIn = useSelector((store) => store.user.isLoggedIn);
+  const userLoginRequest = useSelector(
+    (store) => store.user.userLogin.userLoginRequest
+  );
 
   const handleSubmit = async (values: any) => {
     try {
-      const user: any = await login!(values);
+      const response: any = login!(values);
+      const user: IUserLoginResponse = await response;
       setCookie(ACCESS_TOKEN, user.accessToken, { path: "/" });
       setCookie(REFRESH_TOKEN, user.refreshToken, { path: "/" });
+      history.replace({ pathname: "/" });
+      toast.success("Вы успешно вошли");
     } catch (error: any) {
-      toast.error(error.message, {
-        position: toast.POSITION.TOP_RIGHT,
-      });
+      toast.error(error.message);
     }
   };
 
-  return (
-    <Form
-      inputs={[
-        { name: "email", placeholder: "email", type: "email" },
-        { name: "password", placeholder: "Пароль", type: "password" },
-      ]}
-      buttonText="Войти"
-      title="Вход"
-      onSubmit={handleSubmit}
-      suggestedActions={[
-        {
-          text: "Вы — новый пользователь?",
-          link: "register",
-          linkText: "Зарегистрироваться",
-        },
-        {
-          text: "Забыли пароль?",
-          link: "forgot-password",
-          linkText: "Восстановить пароль",
-        },
-      ]}
-    />
+  return userLoginRequest ? (
+    <Spinner />
+  ) : (
+    <>
+      {userIsLoggedIn ? (
+        <Redirect to={{ pathname: location.state.from.pathname }} />
+      ) : (
+        <Form
+          inputs={[
+            { name: "email", placeholder: "email", type: "email" },
+            { name: "password", placeholder: "Пароль", type: "password" },
+          ]}
+          buttonText="Войти"
+          title="Вход"
+          onSubmit={handleSubmit}
+          suggestedActions={[
+            {
+              text: "Вы — новый пользователь?",
+              link: "register",
+              linkText: "Зарегистрироваться",
+            },
+            {
+              text: "Забыли пароль?",
+              link: "forgot-password",
+              linkText: "Восстановить пароль",
+            },
+          ]}
+        />
+      )}
+    </>
   );
 };
 
