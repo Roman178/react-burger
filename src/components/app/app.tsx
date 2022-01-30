@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect } from "react";
 import Layout from "../layout/layout";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Switch, Route, useLocation, useHistory } from "react-router-dom";
 import Home from "../../pages/home/home";
 import Login from "../../pages/login/login";
 import Signup from "../../pages/signup/signup";
@@ -26,8 +26,14 @@ import {
 import { connect } from "react-redux";
 import { AppThunk } from "../../services/types";
 import Spinner from "../spinner/spinner";
-import { getIngredientsThunk } from "../../services/actions/ingredients";
+import {
+  getIngredientsThunk,
+  removeCurrentIngredient,
+} from "../../services/actions/ingredients";
 import Feed from "../feed/feed";
+import Modal from "../modal/modal";
+import IngredientDetails from "../ingredient-details/ingredient-details";
+import { useModal } from "../../hooks/useModal";
 
 interface IAppProps {
   authAccessToken?: AppThunk;
@@ -77,14 +83,26 @@ const App: FC<IAppProps> = ({ authAccessToken, authRefreshToken }) => {
     authenticate();
   }, [authenticate]);
 
+  const { closeModal } = useModal();
+  const history = useHistory();
+  const location = useLocation<any>();
+
+  const closeModalWithDispatch = () => {
+    dispatch(removeCurrentIngredient());
+    closeModal();
+    history.goBack();
+  };
+
+  const background = location.state?.background;
+
   return (
-    <Router>
-      <Layout>
-        {isApiRequest ? (
-          <Spinner />
-        ) : (
-          <Switch>
-            <Route path={["/", "/ingredients/:id"]} exact>
+    <Layout>
+      {isApiRequest ? (
+        <Spinner />
+      ) : (
+        <>
+          <Switch location={background || location}>
+            <Route path="/" exact>
               <Home />
             </Route>
             <Route path="/login" exact>
@@ -105,11 +123,21 @@ const App: FC<IAppProps> = ({ authAccessToken, authRefreshToken }) => {
             <Route path="/feed" exact>
               <Feed />
             </Route>
+            <Route path="/ingredients/:id">
+              <IngredientDetails />
+            </Route>
           </Switch>
-        )}
-        <ToastContainer />
-      </Layout>
-    </Router>
+          {background && (
+            <Route path="/ingredients/:id">
+              <Modal closeModal={closeModalWithDispatch}>
+                <IngredientDetails />
+              </Modal>
+            </Route>
+          )}
+        </>
+      )}
+      <ToastContainer />
+    </Layout>
   );
 };
 

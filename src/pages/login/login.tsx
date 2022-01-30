@@ -37,8 +37,6 @@ const Login: FC<ILoginProps> = ({ login, ...other }) => {
     }
   };
 
-  console.log(location);
-
   return userLoginRequest ? (
     <Spinner />
   ) : (

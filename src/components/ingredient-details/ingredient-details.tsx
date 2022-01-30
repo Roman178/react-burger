@@ -1,12 +1,38 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import cn from "classnames";
 import css from "./ingredient-details.module.css";
-import { useSelector } from "../../services/hooks";
+import { useDispatch, useSelector } from "../../services/hooks";
 import { IIngredient } from "../../services/types/data";
+import { useHistory, useLocation, useParams } from "react-router-dom";
+import {
+  removeCurrentIngredient,
+  setCurrentIngredient,
+} from "../../services/actions/ingredients";
 
 const IngredientDetails: FC = () => {
   const { image_large, name, calories, proteins, fat, carbohydrates } =
     useSelector((store) => store.currentIngredient as IIngredient);
+  const params = useParams<{ id: string }>();
+  const ingredients = useSelector((store) => store.ingredients.items);
+  const dispatch = useDispatch();
+
+  const history = useHistory();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (history.action === "POP")
+      history.replace({ pathname: location.pathname, state: undefined });
+  }, []);
+
+  useEffect((): any => {
+    if (params.id && ingredients.length > 0) {
+      const currentIngredient = ingredients.find(
+        (ingredient) => ingredient._id === params.id
+      );
+      dispatch(setCurrentIngredient(currentIngredient as IIngredient));
+    }
+    return () => dispatch(removeCurrentIngredient());
+  }, [params.id, ingredients, dispatch]);
 
   return (
     <div className={css.root}>

@@ -45,7 +45,13 @@ const Form: FC<IFormProps> = ({
 
   return (
     <div className={css.root}>
-      <form className={cn("mb-20", css.form)}>
+      <form
+        className={cn("mb-20", css.form)}
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit(inputsValues);
+        }}
+      >
         <h2 className="text text_type_main-medium mb-6">{title}</h2>
         {inputs.map((input) => (
           <div key={input.name} className="mb-6">
@@ -58,14 +64,7 @@ const Form: FC<IFormProps> = ({
             />
           </div>
         ))}
-        <Button
-          onClick={(e) => {
-            e.preventDefault();
-            onSubmit(inputsValues);
-          }}
-        >
-          {buttonText}
-        </Button>
+        <Button>{buttonText}</Button>
       </form>
 
       {suggestedActions.map((action) => (

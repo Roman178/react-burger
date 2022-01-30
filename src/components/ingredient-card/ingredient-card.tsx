@@ -1,27 +1,20 @@
 import React, { FC } from "react";
 import { useDrag } from "react-dnd";
 import { useDispatch, useSelector } from "../../services/hooks";
-import { useModal } from "../../hooks/useModal";
-import IngredientDetails from "../ingredient-details/ingredient-details";
 import cn from "classnames";
 import css from "./ingredient-card.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import Modal from "../modal/modal";
-import {
-  removeCurrentIngredient,
-  setCurrentIngredient,
-} from "../../services/actions/ingredients";
+import { setCurrentIngredient } from "../../services/actions/ingredients";
 import { IIngredient } from "../../services/types/data";
-import { useHistory } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 interface IIngredientCardProps {
   ingredient: IIngredient;
 }
 
 const IngredientCard: FC<IIngredientCardProps> = ({ ingredient }) => {
-  const history = useHistory();
+  const location = useLocation();
 
-  const { isOpenModal, closeModal, openModal } = useModal();
   const ingredientQty = useSelector(
     (store) =>
       store.burgerIngredients.quantity.find(
@@ -38,24 +31,16 @@ const IngredientCard: FC<IIngredientCardProps> = ({ ingredient }) => {
 
   const setIngredient = () => {
     dispatch(setCurrentIngredient(ingredient));
-    openModal();
-    history.push(`/ingredients/${ingredient._id}`);
-  };
-
-  const closeModalWithDispatch = () => {
-    dispatch(removeCurrentIngredient());
-    closeModal();
-    history.push({ pathname: "/" });
   };
 
   return (
-    <>
-      {isOpenModal && (
-        <Modal closeModal={closeModalWithDispatch}>
-          <IngredientDetails />
-        </Modal>
-      )}
-
+    <Link
+      className={css.link}
+      to={{
+        pathname: `/ingredients/${ingredient._id}`,
+        state: { background: location },
+      }}
+    >
       <li ref={dragRef} className={css.card} onClick={() => setIngredient()}>
         {ingredientQty && (
           <span
@@ -75,7 +60,7 @@ const IngredientCard: FC<IIngredientCardProps> = ({ ingredient }) => {
           {ingredient.name}
         </span>
       </li>
-    </>
+    </Link>
   );
 };
 

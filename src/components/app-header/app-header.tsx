@@ -39,7 +39,9 @@ const AppHeader: FC = () => {
             </Link>
           </li>
           <li className={cn(css.listItem, css.logoItem)}>
-            <Logo />
+            <Link to="/">
+              <Logo />
+            </Link>
           </li>
           <li className={cn(css.listItem, "pl-5", "pr-5")}>
             <ProfileIcon type="secondary" />
