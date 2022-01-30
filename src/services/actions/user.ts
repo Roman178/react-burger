@@ -4,6 +4,7 @@ import {
   logoutApi,
   authAccessTokenApi,
   authRefreshTokenApi,
+  updateUserApi,
 } from "../../api/api";
 import * as c from "../constants";
 import { AppDispatch, AppThunk } from "../types";
@@ -42,13 +43,30 @@ export interface ILogoutSuccess {
   readonly type: typeof c.LOGOUT_USER_SUCCESS;
 }
 
+export interface IUpdateUserRequest {
+  readonly type: typeof c.UPDATE_USER_REQUEST;
+}
+
+export interface IUpdateUserFailed {
+  readonly type: typeof c.UPDATE_USER_FAILED;
+  readonly errorMessage: string;
+}
+
+export interface IUpdateUserSuccess {
+  readonly type: typeof c.UPDATE_USER_SUCCESS;
+  readonly user: IUserLoginResponse;
+}
+
 export type TUserActions =
   | ISignupRequest
   | ISignupFailed
   | ILoginRequest
   | ILoginSuccess
   | ILoginFailed
-  | ILogoutSuccess;
+  | ILogoutSuccess
+  | IUpdateUserRequest
+  | IUpdateUserFailed
+  | IUpdateUserSuccess;
 
 export const signupRequest = (): ISignupRequest => ({
   type: c.SIGNUP_USER_REQUEST,
@@ -77,7 +95,25 @@ export const logoutSuccess = (): ILogoutSuccess => ({
   type: c.LOGOUT_USER_SUCCESS,
 });
 
-export const signupThunk: AppThunk = (user: IUserSignupRequest) => {
+export const updateUserRequest = (): IUpdateUserRequest => ({
+  type: c.UPDATE_USER_REQUEST,
+});
+
+export const updateUserFailed = (errorMessage: string): IUpdateUserFailed => ({
+  type: c.UPDATE_USER_FAILED,
+  errorMessage,
+});
+
+export const updateUserSuccess = (
+  user: IUserLoginResponse
+): IUpdateUserSuccess => ({
+  type: c.UPDATE_USER_SUCCESS,
+  user,
+});
+
+export const signupThunk: AppThunk<Promise<any>> = (
+  user: IUserSignupRequest
+) => {
   return async (dispatch: AppDispatch) => {
     dispatch(signupRequest());
 
@@ -95,7 +131,7 @@ export const signupThunk: AppThunk = (user: IUserSignupRequest) => {
   };
 };
 
-export const loginThunk: AppThunk = (user: IUserLoginRequest) => {
+export const loginThunk: AppThunk<Promise<any>> = (user: IUserLoginRequest) => {
   return async (dispatch: AppDispatch) => {
     dispatch(loginRequest());
 
@@ -113,7 +149,7 @@ export const loginThunk: AppThunk = (user: IUserLoginRequest) => {
   };
 };
 
-export const logoutThunk: AppThunk = (refreshToken: string) => {
+export const logoutThunk: AppThunk<Promise<any>> = (refreshToken: string) => {
   return async (dispatch: AppDispatch) => {
     return logoutApi(refreshToken)
       .then(() => {
@@ -123,7 +159,9 @@ export const logoutThunk: AppThunk = (refreshToken: string) => {
   };
 };
 
-export const authAccessTokenThunk: AppThunk = (accessToken: string) => {
+export const authAccessTokenThunk: AppThunk<Promise<any>> = (
+  accessToken: string
+) => {
   return async (dispatch: AppDispatch) => {
     dispatch(loginRequest());
 
@@ -132,11 +170,13 @@ export const authAccessTokenThunk: AppThunk = (accessToken: string) => {
         dispatch(loginSuccess(userData));
         return userData;
       })
-      .catch((err) => Promise.reject(err));
+      .catch((err) => handleThunkError(err, dispatch, loginFailed));
   };
 };
 
-export const authRefreshTokenThunk: AppThunk = (refreshToken: string) => {
+export const authRefreshTokenThunk: AppThunk<Promise<any>> = (
+  refreshToken: string
+) => {
   return async (dispatch: AppDispatch) => {
     dispatch(loginRequest());
 
@@ -146,7 +186,23 @@ export const authRefreshTokenThunk: AppThunk = (refreshToken: string) => {
           dispatch(loginSuccess(userData));
           return tokenData;
         })
-        .catch((err) => Promise.reject(err))
+        .catch((err) => handleThunkError(err, dispatch, loginFailed))
     );
+  };
+};
+
+export const updateUserThunk: AppThunk<Promise<any>> = (
+  newUserData,
+  accessToken
+) => {
+  return async (dispatch: AppDispatch) => {
+    dispatch(updateUserRequest());
+
+    return updateUserApi(newUserData, accessToken)
+      .then((user: any) => {
+        dispatch(updateUserSuccess(user));
+        return user;
+      })
+      .catch((err) => handleThunkError(err, dispatch, loginFailed));
   };
 };

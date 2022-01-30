@@ -16,27 +16,27 @@ const AppHeader: FC = () => {
         <ul className={css.navList}>
           <li className={cn(css.listItem, "pl-5", "pr-5")}>
             <BurgerIcon type="primary" />
-            <a
-              href="/"
+            <Link
+              to="/"
               className={cn(
                 css.listItemLink,
                 "text text_type_main-default ml-2"
               )}
             >
               Конструктор
-            </a>
+            </Link>
           </li>
           <li className={cn(css.listItem, "pl-5", "pr-5")}>
             <ListIcon type="secondary" />
-            <a
-              href="/"
+            <Link
+              to="/feed"
               className={cn(
                 css.listItemLink,
                 "text text_type_main-default ml-2 text_color_inactive"
               )}
             >
               Лента заказов
-            </a>
+            </Link>
           </li>
           <li className={cn(css.listItem, css.logoItem)}>
             <Logo />
@@ -53,15 +53,6 @@ const AppHeader: FC = () => {
             >
               Личный кабинет
             </Link>
-
-            {/* <a
-              href="/"
-              className={cn(
-                css.listItemLink,
-                "text text_type_main-default ml-2 text_color_inactive"
-              )}
-            >
-            </a> */}
           </li>
         </ul>
       </nav>

@@ -8,7 +8,6 @@ import Spinner from "../../components/spinner/spinner";
 const ResetPassword = () => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
-  console.log(history);
 
   const handleSubmit = async (values: {
     newPassword: string;
@@ -26,6 +25,8 @@ const ResetPassword = () => {
     } catch (error: any) {
       const parsedError = await error.json();
       toast.error(parsedError.message);
+      setLoading(false);
+      history.replace("/forgot-password");
     }
   };
 

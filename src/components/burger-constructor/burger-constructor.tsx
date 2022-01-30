@@ -28,6 +28,7 @@ import {
   resetCounter,
 } from "../../services/actions/counter";
 import { removeOrder } from "../../services/actions/orders";
+import { useHistory } from "react-router-dom";
 
 const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
@@ -38,6 +39,8 @@ const BurgerConstructor: FC = () => {
   const selectedBun: IIngredient = useSelector(
     (store) => store.burgerIngredients.bun!
   );
+  const userIsLoggedIn = useSelector((store) => store.user.isLoggedIn);
+  const history = useHistory();
   const { isOpenModal, closeModal, openModal } = useModal();
 
   const [{ canDrop, hovered }, dropTargetRef] = useDrop({
@@ -63,6 +66,10 @@ const BurgerConstructor: FC = () => {
   };
 
   const createOrder = () => {
+    if (!userIsLoggedIn) {
+      return history.push("/login");
+    }
+
     dispatch(
       createOrderAction({
         ingredients: [

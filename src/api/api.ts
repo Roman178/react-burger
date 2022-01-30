@@ -116,3 +116,19 @@ export const resetPassword = async (resetPasswordData: {
     .then(checkResponse)
     .then((data) => data);
 };
+
+export const updateUserApi = async (
+  newUserData: { email?: string; name?: string; password?: string },
+  token: string
+) => {
+  return fetch(`${BASE_URL}/auth/user`, {
+    method: "PATCH",
+    body: JSON.stringify(newUserData),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
+  })
+    .then(checkResponse)
+    .then((data) => data);
+};

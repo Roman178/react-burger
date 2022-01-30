@@ -12,6 +12,10 @@ type TUserState = {
     userLoginRequest: boolean;
     userLoginFailed: { status: boolean; message: string };
   };
+  userUpdate: {
+    userUpdateRequest: boolean;
+    userUpdateFailed: { status: boolean; message: string };
+  };
   isLoggedIn: boolean;
 };
 
@@ -30,6 +34,10 @@ const userInitialState: TUserState = {
   userLogin: {
     userLoginRequest: false,
     userLoginFailed: { status: false, message: "" },
+  },
+  userUpdate: {
+    userUpdateRequest: false,
+    userUpdateFailed: { status: false, message: "" },
   },
   isLoggedIn: false,
 };
@@ -100,6 +108,34 @@ export const userReducer = (state = userInitialState, action: TUserActions) => {
           },
         },
         isLoggedIn: false,
+      };
+    }
+    case c.UPDATE_USER_REQUEST: {
+      return {
+        ...state,
+        userUpdate: {
+          userUpdateRequest: true,
+          userUpdateFailed: { status: false, message: "" },
+        },
+      };
+    }
+    case c.UPDATE_USER_FAILED: {
+      return {
+        ...state,
+        userUpdate: {
+          userUpdateRequest: false,
+          userUpdateFailed: { status: true, message: action.errorMessage },
+        },
+      };
+    }
+    case c.UPDATE_USER_SUCCESS: {
+      return {
+        ...state,
+        currentUser: action.user,
+        userUpdate: {
+          userUpdateRequest: false,
+          userUpdateFailed: { status: false, message: "" },
+        },
       };
     }
     default:

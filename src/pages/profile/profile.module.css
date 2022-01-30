@@ -2,12 +2,14 @@
   max-width: 1230px;
   width: 100%;
   padding-left: 20px;
-  box-sizing: border-box;
   display: flex;
+  min-height: 240px;
 }
 
 .list {
   list-style-type: none;
+  margin: 0 60px 0 0;
+  padding: 0;
 }
 
 .item {
@@ -27,4 +29,18 @@
 
 .wrapper {
   display: flex;
+  align-items: center;
+  width: 355px;
+  justify-content: space-between;
+}
+
+.form {
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.closeIcon {
+  cursor: pointer;
 }

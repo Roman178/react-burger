@@ -1,11 +1,6 @@
 import React, { FC, useCallback, useEffect } from "react";
 import Layout from "../layout/layout";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  useHistory,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "../../pages/home/home";
 import Login from "../../pages/login/login";
 import Signup from "../../pages/signup/signup";
@@ -31,6 +26,8 @@ import {
 import { connect } from "react-redux";
 import { AppThunk } from "../../services/types";
 import Spinner from "../spinner/spinner";
+import { getIngredientsThunk } from "../../services/actions/ingredients";
+import Feed from "../feed/feed";
 
 interface IAppProps {
   authAccessToken?: AppThunk;
@@ -48,16 +45,15 @@ const App: FC<IAppProps> = ({ authAccessToken, authRefreshToken }) => {
   );
   const isApiRequest = userSignupRequest || userLoginRequest;
 
+  useEffect(() => {
+    dispatch(getIngredientsThunk());
+  }, [dispatch]);
+
   const authenticate = useCallback(async () => {
     try {
-      await authAccessToken!(
-        cookies[ACCESS_TOKEN]
-        // "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZjE5MWM4NmQ3Y2Q4MDAxYjJkMjg5MiIsImlhdCI6MTY0MzIyMjY3MCwiZXhwIjoxNjQzMjIzODcwfQ.8p6J3S92HFsrE7SJDV77vhYW-xSpQfop6Wu9ztYnTkE"
-      );
+      await authAccessToken!(cookies[ACCESS_TOKEN]);
     } catch (errorResponse: any) {
-      const error = await errorResponse.json();
-
-      if (error.message === JWT_EXPIRED) {
+      if (errorResponse.message === JWT_EXPIRED) {
         try {
           const tokenData: any = await authRefreshToken!(
             cookies[REFRESH_TOKEN]
@@ -67,14 +63,12 @@ const App: FC<IAppProps> = ({ authAccessToken, authRefreshToken }) => {
         } catch (error: any) {
           dispatch(loginFailed(error.message));
         }
-      } else if (error.message === SHOULD_BE_AUTH) {
+      } else if (errorResponse.message === SHOULD_BE_AUTH) {
         dispatch(loginFailed(""));
         return;
       } else {
-        dispatch(
-          loginFailed(error.message ? error.message : "Что-то пошло не так")
-        );
-        toast.error(error.message ? error.message : "Что-то пошло не так");
+        dispatch(loginFailed(errorResponse.message));
+        toast.error(errorResponse.message);
       }
     }
   }, []);
@@ -90,7 +84,7 @@ const App: FC<IAppProps> = ({ authAccessToken, authRefreshToken }) => {
           <Spinner />
         ) : (
           <Switch>
-            <Route path="/" exact>
+            <Route path={["/", "/ingredients/:id"]} exact>
               <Home />
             </Route>
             <Route path="/login" exact>
@@ -107,6 +101,9 @@ const App: FC<IAppProps> = ({ authAccessToken, authRefreshToken }) => {
             </Route>
             <Route path="/reset-password" exact>
               <ResetPassword />
+            </Route>
+            <Route path="/feed" exact>
+              <Feed />
             </Route>
           </Switch>
         )}

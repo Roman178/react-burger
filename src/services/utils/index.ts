@@ -9,11 +9,13 @@ export const handleThunkError = async (
   if (err.status === 500) {
     dispatch(actionFailed("Server error"));
     return Promise.reject({ message: "Server error" });
-  } else {
+  } else if (err.json) {
     const error = await err.json().then((parsedError: any) => {
       dispatch(actionFailed(parsedError.message));
       return parsedError;
     });
     return Promise.reject(error);
+  } else {
+    return Promise.reject({ message: "Что-то пошло не так :(" });
   }
 };

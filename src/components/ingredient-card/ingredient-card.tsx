@@ -12,12 +12,15 @@ import {
   setCurrentIngredient,
 } from "../../services/actions/ingredients";
 import { IIngredient } from "../../services/types/data";
+import { useHistory } from "react-router-dom";
 
 interface IIngredientCardProps {
   ingredient: IIngredient;
 }
 
 const IngredientCard: FC<IIngredientCardProps> = ({ ingredient }) => {
+  const history = useHistory();
+
   const { isOpenModal, closeModal, openModal } = useModal();
   const ingredientQty = useSelector(
     (store) =>
@@ -36,11 +39,13 @@ const IngredientCard: FC<IIngredientCardProps> = ({ ingredient }) => {
   const setIngredient = () => {
     dispatch(setCurrentIngredient(ingredient));
     openModal();
+    history.push(`/ingredients/${ingredient._id}`);
   };
 
   const closeModalWithDispatch = () => {
     dispatch(removeCurrentIngredient());
     closeModal();
+    history.push({ pathname: "/" });
   };
 
   return (
