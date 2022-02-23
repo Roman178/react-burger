@@ -2,6 +2,7 @@
   width: 600px;
   padding-top: 100px;
   position: relative;
+  align-self: flex-start;
 }
 
 .dropOverlayInvisible {

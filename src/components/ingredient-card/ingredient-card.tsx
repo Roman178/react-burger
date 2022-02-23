@@ -1,24 +1,20 @@
 import React, { FC } from "react";
 import { useDrag } from "react-dnd";
 import { useDispatch, useSelector } from "../../services/hooks";
-import { useModal } from "../../hooks/useModal";
-import IngredientDetails from "../ingredient-details/ingredient-details";
 import cn from "classnames";
 import css from "./ingredient-card.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import Modal from "../modal/modal";
-import {
-  removeCurrentIngredient,
-  setCurrentIngredient,
-} from "../../services/actions/ingredients";
+import { setCurrentIngredient } from "../../services/actions/ingredients";
 import { IIngredient } from "../../services/types/data";
+import { Link, useLocation } from "react-router-dom";
 
 interface IIngredientCardProps {
   ingredient: IIngredient;
 }
 
 const IngredientCard: FC<IIngredientCardProps> = ({ ingredient }) => {
-  const { isOpenModal, closeModal, openModal } = useModal();
+  const location = useLocation();
+
   const ingredientQty = useSelector(
     (store) =>
       store.burgerIngredients.quantity.find(
@@ -35,22 +31,16 @@ const IngredientCard: FC<IIngredientCardProps> = ({ ingredient }) => {
 
   const setIngredient = () => {
     dispatch(setCurrentIngredient(ingredient));
-    openModal();
-  };
-
-  const closeModalWithDispatch = () => {
-    dispatch(removeCurrentIngredient());
-    closeModal();
   };
 
   return (
-    <>
-      {isOpenModal && (
-        <Modal closeModal={closeModalWithDispatch}>
-          <IngredientDetails />
-        </Modal>
-      )}
-
+    <Link
+      className={css.link}
+      to={{
+        pathname: `/ingredients/${ingredient._id}`,
+        state: { background: location },
+      }}
+    >
       <li ref={dragRef} className={css.card} onClick={() => setIngredient()}>
         {ingredientQty && (
           <span
@@ -70,7 +60,7 @@ const IngredientCard: FC<IIngredientCardProps> = ({ ingredient }) => {
           {ingredient.name}
         </span>
       </li>
-    </>
+    </Link>
   );
 };
 

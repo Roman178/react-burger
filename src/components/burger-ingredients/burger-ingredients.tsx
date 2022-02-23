@@ -1,12 +1,5 @@
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-  RefObject,
-  FC,
-} from "react";
-import { useDispatch, useSelector } from "../../services/hooks";
+import React, { useState, useRef, useCallback, RefObject, FC } from "react";
+import { useSelector } from "../../services/hooks";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import css from "./burger-ingredients.module.css";
 
@@ -16,18 +9,11 @@ import {
   MAIN_INGREDIENT,
   translate,
 } from "../../constants/constants";
-import { getIngredientsThunk } from "../../services/actions/ingredients";
 import IngredientsBlock from "../ingredients-block/ingredients-block";
 import { IIngredient } from "../../services/types/data";
 
 const BurgerIngredients: FC = () => {
-  const dispatch = useDispatch();
   const ingredients = useSelector((store) => store.ingredients.items);
-
-  useEffect(() => {
-    if (ingredients.length === 0) dispatch(getIngredientsThunk());
-  }, [dispatch, ingredients]);
-
   const [currentType, setCurrentType] = useState(BUN);
   const bunRef = useRef<HTMLHeadingElement>(null);
   const sauceRef = useRef<HTMLHeadingElement>(null);
@@ -57,8 +43,8 @@ const BurgerIngredients: FC = () => {
         ingredientType: string
       ) => {
         return (
-          coordinates.top <= mainBlockTopCoordinate &&
-          coordinates.bottom > mainBlockTopCoordinate &&
+          Math.round(coordinates.top) <= Math.round(mainBlockTopCoordinate) &&
+          Math.round(coordinates.bottom) > Math.round(mainBlockTopCoordinate) &&
           currentType !== ingredientType
         );
       };
@@ -79,7 +65,6 @@ const BurgerIngredients: FC = () => {
   );
 
   const handleTabClick = (type: string) => {
-    setCurrentType(type);
     refs[`${type}Ref`]?.current?.scrollIntoView();
   };
 

@@ -7,6 +7,7 @@ import {
   ListIcon,
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Link } from "react-router-dom";
 
 const AppHeader: FC = () => {
   return (
@@ -15,42 +16,45 @@ const AppHeader: FC = () => {
         <ul className={css.navList}>
           <li className={cn(css.listItem, "pl-5", "pr-5")}>
             <BurgerIcon type="primary" />
-            <a
-              href="/"
+            <Link
+              to="/"
               className={cn(
                 css.listItemLink,
                 "text text_type_main-default ml-2"
               )}
             >
               Конструктор
-            </a>
+            </Link>
           </li>
           <li className={cn(css.listItem, "pl-5", "pr-5")}>
             <ListIcon type="secondary" />
-            <a
-              href="/"
+            <Link
+              to="/feed"
               className={cn(
                 css.listItemLink,
                 "text text_type_main-default ml-2 text_color_inactive"
               )}
             >
               Лента заказов
-            </a>
+            </Link>
           </li>
           <li className={cn(css.listItem, css.logoItem)}>
-            <Logo />
+            <Link to="/">
+              <Logo />
+            </Link>
           </li>
           <li className={cn(css.listItem, "pl-5", "pr-5")}>
             <ProfileIcon type="secondary" />
-            <a
-              href="/"
+
+            <Link
+              to="/profile"
               className={cn(
                 css.listItemLink,
                 "text text_type_main-default ml-2 text_color_inactive"
               )}
             >
               Личный кабинет
-            </a>
+            </Link>
           </li>
         </ul>
       </nav>
