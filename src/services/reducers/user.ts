@@ -1,6 +1,6 @@
-import * as c from "../constants";
+import * as at from "../action-types";
 import { TUserActions } from "../actions/user";
-import { IUserSignupRequest, IUserLoginResponse } from "../types/data";
+import { IUserLoginResponse } from "../types/data";
 
 type TUserState = {
   currentUser: IUserLoginResponse;
@@ -44,7 +44,7 @@ const userInitialState: TUserState = {
 
 export const userReducer = (state = userInitialState, action: TUserActions) => {
   switch (action.type) {
-    case c.SIGNUP_USER_REQUEST: {
+    case at.SIGNUP_USER_REQUEST: {
       return {
         ...state,
         userSignup: {
@@ -53,7 +53,7 @@ export const userReducer = (state = userInitialState, action: TUserActions) => {
         },
       };
     }
-    case c.SIGNUP_USER_FAILED: {
+    case at.SIGNUP_USER_FAILED: {
       return {
         ...state,
         userSignup: {
@@ -63,7 +63,7 @@ export const userReducer = (state = userInitialState, action: TUserActions) => {
         isLoggedIn: false,
       };
     }
-    case c.LOGIN_USER_REQUEST: {
+    case at.LOGIN_USER_REQUEST: {
       return {
         ...state,
         userLogin: {
@@ -72,7 +72,7 @@ export const userReducer = (state = userInitialState, action: TUserActions) => {
         },
       };
     }
-    case c.LOGIN_USER_FAILED: {
+    case at.LOGIN_USER_FAILED: {
       return {
         ...state,
         userLogin: {
@@ -82,7 +82,7 @@ export const userReducer = (state = userInitialState, action: TUserActions) => {
         isLoggedIn: false,
       };
     }
-    case c.LOGIN_USER_SUCCESS: {
+    case at.LOGIN_USER_SUCCESS: {
       return {
         ...state,
         currentUser: action.user,
@@ -97,7 +97,7 @@ export const userReducer = (state = userInitialState, action: TUserActions) => {
         isLoggedIn: true,
       };
     }
-    case c.LOGOUT_USER_SUCCESS: {
+    case at.LOGOUT_USER_SUCCESS: {
       return {
         ...state,
         currentUser: {
@@ -110,7 +110,7 @@ export const userReducer = (state = userInitialState, action: TUserActions) => {
         isLoggedIn: false,
       };
     }
-    case c.UPDATE_USER_REQUEST: {
+    case at.UPDATE_USER_REQUEST: {
       return {
         ...state,
         userUpdate: {
@@ -119,7 +119,7 @@ export const userReducer = (state = userInitialState, action: TUserActions) => {
         },
       };
     }
-    case c.UPDATE_USER_FAILED: {
+    case at.UPDATE_USER_FAILED: {
       return {
         ...state,
         userUpdate: {
@@ -128,7 +128,7 @@ export const userReducer = (state = userInitialState, action: TUserActions) => {
         },
       };
     }
-    case c.UPDATE_USER_SUCCESS: {
+    case at.UPDATE_USER_SUCCESS: {
       return {
         ...state,
         currentUser: action.user,

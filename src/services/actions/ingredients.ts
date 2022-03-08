@@ -1,52 +1,52 @@
-import * as c from "../constants";
+import * as at from "../action-types";
 import { fetchIngredients } from "../../api/api";
 import { IIngredient } from "../types/data";
 import { AppDispatch, AppThunk } from "../types";
 
 export interface IGetIngredintsRequestAction {
-  readonly type: typeof c.GET_INGREDIENTS_REQUEST;
+  readonly type: typeof at.GET_INGREDIENTS_REQUEST;
 }
 
 export interface IGetIngredintsSuccessAction {
-  readonly type: typeof c.GET_INGREDIENTS_SUCCESS;
+  readonly type: typeof at.GET_INGREDIENTS_SUCCESS;
   readonly items: IIngredient[];
 }
 
 export interface IGetIngredintsFailedAction {
-  readonly type: typeof c.GET_INGREDIENTS_FAILED;
+  readonly type: typeof at.GET_INGREDIENTS_FAILED;
 }
 
 export interface IAddBunToBurger {
-  readonly type: typeof c.ADD_BUN_TO_BURGER;
+  readonly type: typeof at.ADD_BUN_TO_BURGER;
   readonly bun: IIngredient;
 }
 
 export interface IAddIngredientToBurger {
-  readonly type: typeof c.ADD_INGREDIENT_TO_BURGER;
+  readonly type: typeof at.ADD_INGREDIENT_TO_BURGER;
   readonly addedIngredient: IIngredient;
 }
 
 export interface IRemoveIngredientFromBurger {
-  readonly type: typeof c.REMOVE_INGREDIENT_FROM_BURGER;
+  readonly type: typeof at.REMOVE_INGREDIENT_FROM_BURGER;
   readonly removedCreatedAt: IIngredient["createdAt"];
 }
 
 export interface ISortIngredientsBurger {
-  readonly type: typeof c.SORT_INGREDIENTS_BURGER;
+  readonly type: typeof at.SORT_INGREDIENTS_BURGER;
   readonly sortedIngredients: any;
 }
 
 export interface IRemoveAllIngredientsFromBurger {
-  readonly type: typeof c.REMOVE_ALL_INGREDIENTS_FROM_BURGER;
+  readonly type: typeof at.REMOVE_ALL_INGREDIENTS_FROM_BURGER;
 }
 
 export interface ISetCurrentIngredient {
-  readonly type: typeof c.SET_CURRENT_INGREDIENT;
+  readonly type: typeof at.SET_CURRENT_INGREDIENT;
   readonly currentIngredient: IIngredient;
 }
 
 export interface IRemoveCurrentIngredient {
-  readonly type: typeof c.REMOVE_CURRENT_INGREDIENT;
+  readonly type: typeof at.REMOVE_CURRENT_INGREDIENT;
 }
 
 export type TIngredientsActions =
@@ -63,60 +63,60 @@ export type TIngredientsActions =
 // | AppThunk;
 
 export const getIngredintsRequestAction = (): IGetIngredintsRequestAction => ({
-  type: c.GET_INGREDIENTS_REQUEST,
+  type: at.GET_INGREDIENTS_REQUEST,
 });
 
 export const getIngredintsSuccessAction = (
   items: IIngredient[]
 ): IGetIngredintsSuccessAction => ({
-  type: c.GET_INGREDIENTS_SUCCESS,
+  type: at.GET_INGREDIENTS_SUCCESS,
   items,
 });
 
 export const getIngredintsFailedAction = (): IGetIngredintsFailedAction => ({
-  type: c.GET_INGREDIENTS_FAILED,
+  type: at.GET_INGREDIENTS_FAILED,
 });
 
 export const addBunToBurger = (bun: IIngredient): IAddBunToBurger => ({
-  type: c.ADD_BUN_TO_BURGER,
+  type: at.ADD_BUN_TO_BURGER,
   bun,
 });
 
 export const addIngredientToBurger = (
   ingredient: IIngredient
 ): IAddIngredientToBurger => ({
-  type: c.ADD_INGREDIENT_TO_BURGER,
+  type: at.ADD_INGREDIENT_TO_BURGER,
   addedIngredient: ingredient,
 });
 
 export const removeIngredientFromBurger = (
   createdAt: IIngredient["createdAt"]
 ): IRemoveIngredientFromBurger => ({
-  type: c.REMOVE_INGREDIENT_FROM_BURGER,
+  type: at.REMOVE_INGREDIENT_FROM_BURGER,
   removedCreatedAt: createdAt,
 });
 
 export const sortIngredientsBurger = (
   sortedIngredients: any
 ): ISortIngredientsBurger => ({
-  type: c.SORT_INGREDIENTS_BURGER,
+  type: at.SORT_INGREDIENTS_BURGER,
   sortedIngredients,
 });
 
 export const removeAllIngredientsFromBurger =
   (): IRemoveAllIngredientsFromBurger => ({
-    type: c.REMOVE_ALL_INGREDIENTS_FROM_BURGER,
+    type: at.REMOVE_ALL_INGREDIENTS_FROM_BURGER,
   });
 
 export const setCurrentIngredient = (
   ingredient: IIngredient
 ): ISetCurrentIngredient => ({
-  type: c.SET_CURRENT_INGREDIENT,
+  type: at.SET_CURRENT_INGREDIENT,
   currentIngredient: ingredient,
 });
 
 export const removeCurrentIngredient = (): IRemoveCurrentIngredient => ({
-  type: c.REMOVE_CURRENT_INGREDIENT,
+  type: at.REMOVE_CURRENT_INGREDIENT,
 });
 
 export const getIngredientsThunk: AppThunk = () => {

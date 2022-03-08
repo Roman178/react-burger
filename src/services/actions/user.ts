@@ -6,7 +6,7 @@ import {
   authRefreshTokenApi,
   updateUserApi,
 } from "../../api/api";
-import * as c from "../constants";
+import * as at from "../action-types";
 import { AppDispatch, AppThunk } from "../types";
 import {
   IUserSignupRequest,
@@ -17,43 +17,43 @@ import {
 import { handleThunkError } from "../utils";
 
 export interface ISignupRequest {
-  readonly type: typeof c.SIGNUP_USER_REQUEST;
+  readonly type: typeof at.SIGNUP_USER_REQUEST;
 }
 
 export interface ISignupFailed {
-  readonly type: typeof c.SIGNUP_USER_FAILED;
+  readonly type: typeof at.SIGNUP_USER_FAILED;
   readonly errorMessage: string;
 }
 
 export interface ILoginRequest {
-  readonly type: typeof c.LOGIN_USER_REQUEST;
+  readonly type: typeof at.LOGIN_USER_REQUEST;
 }
 
 export interface ILoginFailed {
-  readonly type: typeof c.LOGIN_USER_FAILED;
+  readonly type: typeof at.LOGIN_USER_FAILED;
   readonly errorMessage: string;
 }
 
 export interface ILoginSuccess {
-  readonly type: typeof c.LOGIN_USER_SUCCESS;
+  readonly type: typeof at.LOGIN_USER_SUCCESS;
   readonly user: IUserLoginResponse;
 }
 
 export interface ILogoutSuccess {
-  readonly type: typeof c.LOGOUT_USER_SUCCESS;
+  readonly type: typeof at.LOGOUT_USER_SUCCESS;
 }
 
 export interface IUpdateUserRequest {
-  readonly type: typeof c.UPDATE_USER_REQUEST;
+  readonly type: typeof at.UPDATE_USER_REQUEST;
 }
 
 export interface IUpdateUserFailed {
-  readonly type: typeof c.UPDATE_USER_FAILED;
+  readonly type: typeof at.UPDATE_USER_FAILED;
   readonly errorMessage: string;
 }
 
 export interface IUpdateUserSuccess {
-  readonly type: typeof c.UPDATE_USER_SUCCESS;
+  readonly type: typeof at.UPDATE_USER_SUCCESS;
   readonly user: IUserLoginResponse;
 }
 
@@ -69,45 +69,45 @@ export type TUserActions =
   | IUpdateUserSuccess;
 
 export const signupRequest = (): ISignupRequest => ({
-  type: c.SIGNUP_USER_REQUEST,
+  type: at.SIGNUP_USER_REQUEST,
 });
 
 export const signupFailed = (errorMessage: string): ISignupFailed => ({
-  type: c.SIGNUP_USER_FAILED,
+  type: at.SIGNUP_USER_FAILED,
   errorMessage,
 });
 
 export const loginRequest = (): ILoginRequest => ({
-  type: c.LOGIN_USER_REQUEST,
+  type: at.LOGIN_USER_REQUEST,
 });
 
 export const loginFailed = (errorMessage: string): ILoginFailed => ({
-  type: c.LOGIN_USER_FAILED,
+  type: at.LOGIN_USER_FAILED,
   errorMessage,
 });
 
 export const loginSuccess = (user: IUserLoginResponse): ILoginSuccess => ({
-  type: c.LOGIN_USER_SUCCESS,
+  type: at.LOGIN_USER_SUCCESS,
   user,
 });
 
 export const logoutSuccess = (): ILogoutSuccess => ({
-  type: c.LOGOUT_USER_SUCCESS,
+  type: at.LOGOUT_USER_SUCCESS,
 });
 
 export const updateUserRequest = (): IUpdateUserRequest => ({
-  type: c.UPDATE_USER_REQUEST,
+  type: at.UPDATE_USER_REQUEST,
 });
 
 export const updateUserFailed = (errorMessage: string): IUpdateUserFailed => ({
-  type: c.UPDATE_USER_FAILED,
+  type: at.UPDATE_USER_FAILED,
   errorMessage,
 });
 
 export const updateUserSuccess = (
   user: IUserLoginResponse
 ): IUpdateUserSuccess => ({
-  type: c.UPDATE_USER_SUCCESS,
+  type: at.UPDATE_USER_SUCCESS,
   user,
 });
 

@@ -19,13 +19,15 @@ export const fetchIngredients = async () => {
 };
 
 export const createOrderApi = async (
-  ingredients: Array<IIngredient["_id"]>
+  ingredients: Array<IIngredient["_id"]>,
+  token: string
 ): Promise<any> => {
   return fetch(`${BASE_URL}/orders`, {
     method: "POST",
     body: JSON.stringify(ingredients),
     headers: {
       "Content-Type": "application/json",
+      authorization: token,
     },
   })
     .then(checkResponse)

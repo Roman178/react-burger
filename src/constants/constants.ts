@@ -1,4 +1,5 @@
 const BASE_URL: string = "https://norma.nomoreparties.space/api";
+const WS_URL = "wss://norma.nomoreparties.space/orders";
 
 const BUN: string = "bun";
 const SAUCE: string = "sauce";
@@ -17,6 +18,7 @@ const SHOULD_BE_AUTH = "You should be authorised";
 
 export {
   BASE_URL,
+  WS_URL,
   BUN,
   SAUCE,
   MAIN_INGREDIENT,

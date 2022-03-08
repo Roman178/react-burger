@@ -29,6 +29,8 @@ import {
 } from "../../services/actions/counter";
 import { removeOrder } from "../../services/actions/orders";
 import { useHistory } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { ACCESS_TOKEN } from "../../constants/constants";
 
 const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
@@ -42,6 +44,7 @@ const BurgerConstructor: FC = () => {
   const userIsLoggedIn = useSelector((store) => store.user.isLoggedIn);
   const history = useHistory();
   const { isOpenModal, closeModal, openModal } = useModal();
+  const [cookies, ,] = useCookies([ACCESS_TOKEN]);
 
   const [{ canDrop, hovered }, dropTargetRef] = useDrop({
     accept: "ingredient",
@@ -71,12 +74,15 @@ const BurgerConstructor: FC = () => {
     }
 
     dispatch(
-      createOrderAction({
-        ingredients: [
-          ...burgerIngredients.map((i: IIngredient) => i._id),
-          selectedBun._id,
-        ],
-      })
+      createOrderAction(
+        {
+          ingredients: [
+            ...burgerIngredients.map((i: IIngredient) => i._id),
+            selectedBun._id,
+          ],
+        },
+        cookies[ACCESS_TOKEN]
+      )
     );
     openModal();
     dispatch(removeAllIngredientsFromBurger());

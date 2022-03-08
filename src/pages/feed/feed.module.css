@@ -1,0 +1,39 @@
+.root {
+  display: flex;
+  width: 100%;
+  max-width: 1280px;
+}
+
+.title {
+  margin: 0;
+}
+
+.totalWrapper {
+  width: 100%;
+  padding-top: 100px;
+  margin-left: 60px;
+}
+
+.ordersWrapper {
+  display: flex;
+}
+
+.doneOrdersWrapper {
+  flex-grow: 2.5;
+  margin-right: 36px;
+}
+
+.doneOrders {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 322px;
+}
+
+.doneOrderNumber {
+  color: #00cccc;
+}
+
+.inProgressOrdersWrapper {
+  flex-grow: 0.5;
+}
