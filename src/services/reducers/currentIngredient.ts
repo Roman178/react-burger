@@ -1,4 +1,4 @@
-import * as c from "../constants";
+import * as at from "../action-types";
 import { IIngredient } from "../types/data";
 import { TIngredientsActions } from "../actions/ingredients";
 
@@ -11,10 +11,10 @@ export const currentIngredientReducer = (
   action: TIngredientsActions
 ) => {
   switch (action.type) {
-    case c.SET_CURRENT_INGREDIENT: {
+    case at.SET_CURRENT_INGREDIENT: {
       return action.currentIngredient;
     }
-    case c.REMOVE_CURRENT_INGREDIENT: {
+    case at.REMOVE_CURRENT_INGREDIENT: {
       return currentIngredientInitialState;
     }
     default:

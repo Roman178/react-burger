@@ -1,4 +1,4 @@
-import * as c from "../constants";
+import * as at from "../action-types";
 import { IIngredient } from "../types/data";
 import { TIngredientsActions } from "../actions/ingredients";
 
@@ -19,10 +19,10 @@ export const ingredientsReducer = (
   action: TIngredientsActions
 ) => {
   switch (action.type) {
-    case c.GET_INGREDIENTS_REQUEST: {
+    case at.GET_INGREDIENTS_REQUEST: {
       return { ...state, ingredientsRequest: true };
     }
-    case c.GET_INGREDIENTS_SUCCESS: {
+    case at.GET_INGREDIENTS_SUCCESS: {
       return {
         ...state,
         ingredientsRequest: false,
@@ -30,7 +30,7 @@ export const ingredientsReducer = (
         items: action.items,
       };
     }
-    case c.GET_INGREDIENTS_FAILED: {
+    case at.GET_INGREDIENTS_FAILED: {
       return { ...state, ingredientsRequest: false, ingredientsFailed: true };
     }
     default:

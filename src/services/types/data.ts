@@ -22,6 +22,16 @@ export interface IOrder {
   };
 }
 
+export interface IOrderWsResponse {
+  _id: string;
+  ingredients: string[];
+  status: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  number: number;
+}
+
 export interface IUserSignupRequest {
   email: string;
   password: string;

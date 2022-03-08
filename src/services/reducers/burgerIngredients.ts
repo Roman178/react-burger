@@ -1,4 +1,4 @@
-import * as c from "../constants";
+import * as at from "../action-types";
 import { IIngredient } from "../types/data";
 import { TIngredientsActions } from "../actions/ingredients";
 import { TCounterActions } from "../actions/counter";
@@ -59,15 +59,15 @@ export const burgerIngredientsReducer = (
   action: TIngredientsActions | TCounterActions
 ) => {
   switch (action.type) {
-    case c.ADD_BUN_TO_BURGER: {
+    case at.ADD_BUN_TO_BURGER: {
       return { ...state, bun: action.bun };
     }
-    case c.ADD_INGREDIENT_TO_BURGER: {
+    case at.ADD_INGREDIENT_TO_BURGER: {
       return state.bun
         ? { ...state, items: [...state.items, action.addedIngredient] }
         : state;
     }
-    case c.REMOVE_INGREDIENT_FROM_BURGER: {
+    case at.REMOVE_INGREDIENT_FROM_BURGER: {
       return {
         ...state,
         items: [...state.items].filter(
@@ -75,25 +75,25 @@ export const burgerIngredientsReducer = (
         ),
       };
     }
-    case c.SORT_INGREDIENTS_BURGER: {
+    case at.SORT_INGREDIENTS_BURGER: {
       return { ...state, items: action.sortedIngredients };
     }
-    case c.REMOVE_ALL_INGREDIENTS_FROM_BURGER: {
+    case at.REMOVE_ALL_INGREDIENTS_FROM_BURGER: {
       return { ...state, items: [], bun: null };
     }
-    case c.INCREASE_INGREDIENT_COUNTER: {
+    case at.INCREASE_INGREDIENT_COUNTER: {
       return {
         ...state,
         quantity: increaseCounter(state, action.addedIngredient),
       };
     }
-    case c.DECREASE_INGREDIENT_COUNTER: {
+    case at.DECREASE_INGREDIENT_COUNTER: {
       return {
         ...state,
         quantity: decreaseCounter(state.quantity, action.addedIngredient),
       };
     }
-    case c.RESET_COUNTER: {
+    case at.RESET_COUNTER: {
       return {
         ...state,
         quantity: [],

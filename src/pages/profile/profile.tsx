@@ -15,13 +15,12 @@ import css from "./profile.module.css";
 import cn from "classnames";
 import {
   Switch,
-  Route,
   useRouteMatch,
   Link,
   NavLink,
   useLocation,
 } from "react-router-dom";
-import Orders from "./orders";
+import OrdersFeed from "../../components/orders-feed/orders-feed";
 import {
   CloseIcon,
   Input,
@@ -29,6 +28,7 @@ import {
 import { connect } from "react-redux";
 import { AppThunk } from "../../services/types";
 import { toast } from "react-toastify";
+import PrivateRoute from "../../components/private-route/private-route";
 
 interface IProfileProps {
   updateUser?: AppThunk<Promise<any>>;
@@ -248,9 +248,9 @@ const Profile: FC<IProfileProps> = ({ updateUser, authRefreshToken }) => {
           </form>
         )}
         <Switch>
-          <Route path={`${path}/orders`}>
-            <Orders />
-          </Route>
+          <PrivateRoute path={`${path}/orders`}>
+            <OrdersFeed />
+          </PrivateRoute>
         </Switch>
       </div>
     </>

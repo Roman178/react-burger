@@ -1,18 +1,18 @@
-import * as c from "../constants";
+import * as at from "../action-types";
 import { IIngredient } from "../types/data";
 
 export interface IIncreaseIngredientCounter {
-  readonly type: typeof c.INCREASE_INGREDIENT_COUNTER;
+  readonly type: typeof at.INCREASE_INGREDIENT_COUNTER;
   addedIngredient: IIngredient;
 }
 
 export interface IDecreaseIngredientCounter {
-  readonly type: typeof c.DECREASE_INGREDIENT_COUNTER;
+  readonly type: typeof at.DECREASE_INGREDIENT_COUNTER;
   addedIngredient: IIngredient;
 }
 
 export interface IResetCounter {
-  readonly type: typeof c.RESET_COUNTER;
+  readonly type: typeof at.RESET_COUNTER;
 }
 
 export type TCounterActions =
@@ -23,17 +23,17 @@ export type TCounterActions =
 export const increaseIngredientCounter = (
   ingredient: IIngredient
 ): IIncreaseIngredientCounter => ({
-  type: c.INCREASE_INGREDIENT_COUNTER,
+  type: at.INCREASE_INGREDIENT_COUNTER,
   addedIngredient: ingredient,
 });
 
 export const decreaseIngredientCounter = (
   ingredient: IIngredient
 ): IDecreaseIngredientCounter => ({
-  type: c.DECREASE_INGREDIENT_COUNTER,
+  type: at.DECREASE_INGREDIENT_COUNTER,
   addedIngredient: ingredient,
 });
 
 export const resetCounter = (): IResetCounter => ({
-  type: c.RESET_COUNTER,
+  type: at.RESET_COUNTER,
 });

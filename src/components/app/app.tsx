@@ -30,10 +30,11 @@ import {
   getIngredientsThunk,
   removeCurrentIngredient,
 } from "../../services/actions/ingredients";
-import Feed from "../feed/feed";
+import Feed from "../../pages/feed/feed";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import { useModal } from "../../hooks/useModal";
+import OrderInfo from "../order-info/order-info";
 
 interface IAppProps {
   authAccessToken?: AppThunk;
@@ -111,8 +112,16 @@ const App: FC<IAppProps> = ({ authAccessToken, authRefreshToken }) => {
             <Route path="/register" exact>
               <Signup />
             </Route>
-            <PrivateRoute path="/profile">
+            <PrivateRoute
+              path="/profile"
+              exact={
+                location.pathname.includes("/profile/orders/") && !background
+              }
+            >
               <Profile />
+            </PrivateRoute>
+            <PrivateRoute path="/profile/orders/:orderId">
+              <OrderInfo />
             </PrivateRoute>
             <Route path="/forgot-password" exact>
               <ForgotPassword />
@@ -123,16 +132,31 @@ const App: FC<IAppProps> = ({ authAccessToken, authRefreshToken }) => {
             <Route path="/feed" exact>
               <Feed />
             </Route>
+            <Route path="/feed/:orderId" exact>
+              <OrderInfo />
+            </Route>
             <Route path="/ingredients/:id">
               <IngredientDetails />
             </Route>
           </Switch>
           {background && (
-            <Route path="/ingredients/:id">
-              <Modal closeModal={closeModalWithDispatch}>
-                <IngredientDetails />
-              </Modal>
-            </Route>
+            <Switch>
+              <Route path="/ingredients/:id">
+                <Modal closeModal={closeModalWithDispatch}>
+                  <IngredientDetails />
+                </Modal>
+              </Route>
+              <Route path="/feed/:orderId">
+                <Modal closeModal={() => history.goBack()}>
+                  <OrderInfo />
+                </Modal>
+              </Route>
+              <PrivateRoute path="/profile/orders/:orderId">
+                <Modal closeModal={() => history.goBack()}>
+                  <OrderInfo />
+                </Modal>
+              </PrivateRoute>
+            </Switch>
           )}
         </>
       )}
