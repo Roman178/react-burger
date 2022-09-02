@@ -5,7 +5,7 @@ import "./index.css";
 import { Provider } from "react-redux";
 import { CookiesProvider } from "react-cookie";
 import { store } from "./services/store";
-import { BrowserRouter as Router } from "react-router-dom";
+import { HashRouter as Router } from "react-router-dom";
 
 ReactDOM.render(
   <CookiesProvider>
